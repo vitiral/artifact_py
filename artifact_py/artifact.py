@@ -1,12 +1,13 @@
-
 class Artifact:
-    def __init__(self, name, file_, partof, parts, completed, text, impl_, subnames, done):
+    def __init__(self, settings, name, file_, partof, parts, completed,
+                 section, impl_, subnames, done):
+        self._settings = settings
         self.name = name
         self.file = file_
         self.partof = partof
         self.parts = parts
         self.completed = completed
-        self.text = text
+        self.section = section
         self.impl_ = impl
         self.subnames = subnames
         self.done = done
@@ -14,7 +15,7 @@ class Artifact:
     def serialize(self):
         return {
             "name": self.name.serialize(),
-            "file": self.file, # TODO: remove root
+            "file": self.file,  # TODO: remove root
             "partof": sorted(utils.serialize_all(self.partof)),
             "parts": sorted(utils.serialize_all(self.parts)),
             "completed": self.completed.serialize(),
@@ -37,9 +38,8 @@ class ArtifactIm:
     @classmethod
     def from_dict(cls, dct, name=None, file_=None):
         """Construct from a dictionary, with some overloads available."""
-        return cls(
-            name=dct['name'] if name is None else name,
-            file_=dct['file'] if file_ is None else file_,
-            partof=dct.get('partof', set()),
-            subnames=dct.get('subnames', set()),
-            done=dct.get('done'))
+        return cls(name=dct['name'] if name is None else name,
+                   file_=dct['file'] if file_ is None else file_,
+                   partof=dct.get('partof', set()),
+                   subnames=dct.get('subnames', set()),
+                   done=dct.get('done'))

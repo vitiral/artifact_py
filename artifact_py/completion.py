@@ -4,7 +4,9 @@ For types and methods associated with the completion ratio of artifacts.
 from . import utils
 from . import name
 
-SUB_PART_VALID_RE = re.compile(r"^(?:tst-)?[{}]+$".format(name.NAME_VALID_CHARS), re.IGNORECASE)
+SUB_PART_VALID_RE = re.compile(
+    r"^(?:tst-)?[{}]+$".format(name.NAME_VALID_CHARS), re.IGNORECASE)
+
 
 class SubPart(utils.KeyCmp):
     def __init__(self, key, raw):

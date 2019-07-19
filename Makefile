@@ -20,7 +20,7 @@ init:
 	py3/bin/pip install pytest yapf pylint twine
 
 fix:
-	py3/bin/yapf --in-place -r anchor_txt tests
+	py3/bin/yapf --in-place -r artifact_py tests
 
 lint:
 	py3/bin/pylint anchor_txt

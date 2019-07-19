@@ -22,7 +22,8 @@ class TestArtifactsOnly:
     DIR = os.path.join(TEST_DIR, "artifacts_only")
 
     def run_test(self, name):
-        test_name = "TEST_NAME={}.test_{}".format(self.__class__.__name__, name)
+        test_name = "TEST_NAME={}.test_{}".format(self.__class__.__name__,
+                                                  name)
         expected = read_yaml(os.path.join(self.DIR, name + '.yml'))
         md = os.path.join(self.DIR, name + '.md')
         project = load.from_root_file(md)

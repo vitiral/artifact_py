@@ -1,8 +1,8 @@
 import os
 
+
 class KeyCmp(object):
     """An object which is key comparable."""
-
     def __init__(self, key):
         self.key = key
 
@@ -31,6 +31,7 @@ def joinabs_all(root_dir, paths):
 
 def serialize_list(lst):
     return [v.serialize() for v in lst]
+
 
 def relpath_all(root_dir, paths):
     """Return the relative paths to the root directory."""
