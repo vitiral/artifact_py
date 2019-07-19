@@ -11,6 +11,19 @@ class Artifact:
         self.subnames = subnames
         self.done = done
 
+    def serialize(self):
+        return {
+            "name": self.name.serialize(),
+            "file": self.file, # TODO: remove root
+            "partof": sorted(utils.serialize_all(self.partof)),
+            "parts": sorted(utils.serialize_all(self.parts)),
+            "completed": self.completed.serialize(),
+            "text": self.text,
+            "impl": self._impl.serialize(),
+            "subnames": sorted(utils.serialize_all(self.subnames)),
+            "done": self.done.serialize(),
+        }
+
 
 class ArtifactIm:
     """Intermediate artifact."""

@@ -29,3 +29,6 @@ class Name(utils.KeyCmp):
 
     def __repr__(self):
         return self.raw
+
+    def serialize(self):
+        return self.raw

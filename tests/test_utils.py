@@ -18,6 +18,9 @@ class TestPaths(unittest.TestCase):
         assert '/root' == os.path.join('/any/long/path', '/root')
         assert '/a/b/' == os.path.join('/a/b/', '')
 
+    def test_dirname(self):
+        assert '' == os.path.dirname('foo')
+
     def test_home(self):
         try:
             utils.abspath('~')

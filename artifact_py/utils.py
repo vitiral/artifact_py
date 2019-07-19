@@ -27,3 +27,11 @@ def joinabs(a, b):
 
 def joinabs_all(root_dir, paths):
     return [joinabs(root_dir, p) for p in paths]
+
+
+def serialize_list(lst):
+    return [v.serialize() for v in lst]
+
+def relpath_all(root_dir, paths):
+    """Return the relative paths to the root directory."""
+    return [os.path.relpath(p, start=root_dir) for p in paths]

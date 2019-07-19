@@ -1,0 +1,5 @@
+settings:
+    code_paths: ['src']
+    exclude_code_paths: []
+    extra: {}
+artifacts: []

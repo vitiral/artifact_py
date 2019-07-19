@@ -1,7 +1,8 @@
 ```yaml @
 artifact:
     root_dir: "./"
-    code_paths: []
+    code_paths:
+        - src/
     exclude_code_paths: []
 ```
 
