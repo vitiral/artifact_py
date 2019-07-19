@@ -1,5 +1,6 @@
 import copy
 
+import six
 import anchor_txt
 import networkx as nx
 
@@ -17,13 +18,13 @@ def from_root_file(root_file):
         sections=root_section.sections,
         file_=root_file,
     )
-    artifacts = load_artifacts(
+    artifacts_builder = load_artifacts_builder(
         project_sections=project_sections,
         settings=p_settings,
     )
     return project.Project(
         settings=p_settings,
-        artifacts=artifacts,
+        artifacts={n: b.build(p_settings) for n, b in six.iteritems(artifacts_builder.builders)},
         contents=root_section.contents,
         sections=project_sections,
     )
@@ -56,21 +57,23 @@ def load_project_sections(sections, file_):
     return project_sections
 
 
-def load_artifacts(project_sections, settings):
+def load_artifacts_builder(project_sections, settings):
     graph = nx.DiGraph()
 
     builders = [
         s for s in project_sections if isinstance(s, artifact.ArtifactBuilder)
     ]
 
+    # create the graph
     for art in builders:
         graph.add_node(art.name)
 
         for part in art.partof:
             graph.add_edge(part, art.name)
 
-    artifacts = {art.name: art.build(settings) for art in builders}
+    for art in builders:
+        art.set_parts(set(graph.neighbors(art.name)))
 
-    return artifacts
+    builders = {b.name: b for b in builders}
 
-
+    return artifact.ArtifactsBuilder(builders=builders, graph=graph)

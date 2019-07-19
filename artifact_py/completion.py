@@ -1,6 +1,7 @@
 """
 For types and methods associated with the completion ratio of artifacts.
 """
+import re
 from . import utils
 from . import name
 
@@ -18,13 +19,16 @@ class SubPart(utils.KeyCmp):
 
     @classmethod
     def from_str(cls, raw):
-        match = SUB_NAME_VALID_RE.match(raw)
+        match = SUB_PART_VALID_RE.match(raw)
         if not match:
             raise ValueError("Invalid subparts: {}".format(raw))
 
-        return cls(key=raw.upper(), raw)
+        return cls(key=raw.upper(), raw=raw)
 
     def __repr__(self):
+        return self.raw
+
+    def serialize(self):
         return self.raw
 
 

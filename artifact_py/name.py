@@ -34,3 +34,8 @@ class Name(utils.KeyCmp):
 
     def serialize(self):
         return self.raw
+
+
+def new(raw):
+    """Shortcut method."""
+    return Name.from_str(raw)

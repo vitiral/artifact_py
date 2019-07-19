@@ -10,6 +10,8 @@ class KeyCmp(object):
         return hash(self.key)
 
     def _cmp(self, other):
+        if not isinstance(other, self.__class__):
+            raise TypeError(other)
         if self.key == other.key:
             return 0
         elif self.key < other.key:
@@ -58,5 +60,3 @@ def serialize(value):
     if value is None:
         return value
     return value.serialize()
-
-

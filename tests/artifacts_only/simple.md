@@ -22,4 +22,8 @@ You can link to other artifacts with [SPC-other], or to subparts with
 artifact is exported.
 
 # Other Artifact (SPC-other) {#SPC-other}
+```yaml @
+partof:
+  - SPC-simple
+```
 This is another artifact for demonstration purposes.
