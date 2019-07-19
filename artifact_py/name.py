@@ -14,7 +14,7 @@ TST = "TST"
 
 class Name(utils.KeyCmp):
     def __init__(self, key, ty, raw):
-        super(Name, self).__init__(key=key)
+        super(Name, self).__init__(key=key.upper())
         self.ty = ty
         self.raw = raw
 

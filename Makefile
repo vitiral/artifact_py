@@ -13,10 +13,12 @@ init:
 	# python2
 	virtualenv --python=python2 py2
 	py2/bin/pip install -r requirements.txt
+	py2/bin/pip install -e ../anchor_txt
 	py2/bin/pip install pytest
 	# python3
 	virtualenv --python=python3 py3
 	py3/bin/pip install -r requirements.txt
+	py3/bin/pip install -e ../anchor_txt
 	py3/bin/pip install pytest yapf pylint twine
 
 fix:

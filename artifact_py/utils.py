@@ -9,10 +9,31 @@ class KeyCmp(object):
     def __hash__(self):
         return hash(self.key)
 
-    def __cmp__(self, other):
-        if not isinstance(other, self.__class__):
-            raise TypeError(type(other))
-        return self.key.__cmp__(other.key)
+    def _cmp(self, other):
+        if self.key == other.key:
+            return 0
+        elif self.key < other.key:
+            return -1
+        else:
+            return 1
+
+    def __lt__(self, other):
+        return self._cmp(other) < 0
+
+    def __le__(self, other):
+        return self._cmp(other) <= 0
+
+    def __eq__(self, other):
+        return self._cmp(other) == 0
+
+    def __ne__(self, other):
+        return self._cmp(other) != 0
+
+    def __ge__(self, other):
+        return self._cmp(other) >= 0
+
+    def __gt__(self, other):
+        return self._cmp(other) > 0
 
 
 def abspath(path):

@@ -62,10 +62,15 @@ def load_artifacts(project_sections, settings):
     builders = [
         s for s in project_sections if isinstance(s, artifact.ArtifactBuilder)
     ]
-    # for art in builders:
-    #     graph.add_nodes(art.name)
 
-    #     for part in art.partof:
-    #         graph.add_edge(part, art.name)
+    for art in builders:
+        graph.add_node(art.name)
 
-    return {art.name: art.build(settings) for art in builders}
+        for part in art.partof:
+            graph.add_edge(part, art.name)
+
+    artifacts = {art.name: art.build(settings) for art in builders}
+
+    return artifacts
+
+

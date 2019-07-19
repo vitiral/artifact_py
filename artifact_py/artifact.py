@@ -42,7 +42,7 @@ class ArtifactBuilder:
         self.done = done
         self.extra = extra
 
-        self.parts = {}
+        self.parts = None
         self.completed = None
         self.impl = None
 
@@ -65,6 +65,9 @@ class ArtifactBuilder:
             done=attributes.pop('done', None),
             extra=attributes,
         )
+
+    def set_parts(self, parts):
+        self.parts = parts
 
     def build(self, settings):
         return Artifact(
