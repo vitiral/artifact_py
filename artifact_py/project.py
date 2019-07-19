@@ -13,5 +13,5 @@ class Project:
     def serialize(self):
         return {
             "settings": self.settings.serialize(),
-            "artifacts": utils.serialize_list(six.itervalues(self.artifacts)),
+            "artifacts": self.settings.serialize_list(six.itervalues(self.artifacts)),
         }

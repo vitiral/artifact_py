@@ -7,7 +7,6 @@ from . import completion
 
 class Artifact:
     def __init__(self, settings, name, file_, partof, section, subparts, done, parts):
-        self._settings = settings
         self.name = name
         self.file = file_
         self.partof = partof
@@ -20,19 +19,19 @@ class Artifact:
         # self.completed = completed
         # self.impl_ = impl
 
-    def serialize(self):
+    def serialize(self, settings):
         return {
-            "name": self.name.serialize(),
-            "file": self._settings.relpath(self.file),
-            "partof": sorted(utils.serialize_list(self.partof)),
+            "name": self.name.serialize(settings),
+            "file": settings.relpath(self.file),
+            "partof": sorted(settings.serialize_list(self.partof)),
             "text": self.section.to_lines(),
-            "subparts": sorted(utils.serialize_list(self.subparts)),
-            "done": utils.serialize(self.done),
-            "parts": sorted(utils.serialize_list(self.parts)),
+            "subparts": sorted(settings.serialize_list(self.subparts)),
+            "done": settings.serialize_maybe(self.done),
+            "parts": sorted(settings.serialize_list(self.parts)),
 
             # TODO: calculated
-            # "completed": self.completed.serialize(),
-            # "impl": self._impl.serialize(),
+            # "completed": self.completed.serialize(settings),
+            # "impl": self._impl.serialize(settings),
         }
 
 

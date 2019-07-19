@@ -32,7 +32,7 @@ class Name(utils.KeyCmp):
     def __repr__(self):
         return self.raw
 
-    def serialize(self):
+    def serialize(self, _s):
         return self.raw
 
 

@@ -28,10 +28,46 @@ class SubPart(utils.KeyCmp):
     def __repr__(self):
         return self.raw
 
-    def serialize(self):
+    def serialize(self, _settings):
         return self.raw
 
 
-class Done:
-    def __init__(self):
-        pass
+class ImplDone:
+    def __init__(self, raw):
+        self.raw = raw
+
+    def serialize(self, _settings):
+        return self.raw
+
+class ImplCode:
+    """Implemented in code.
+
+    primary: CodeLoc or None
+    secondary: dict[SubPart, CodeLoc]
+    """
+
+    def __init__(self, primary, secondary):
+        self.primary = primary
+        self.secondary = secondary
+
+    def serialize(self, settings):
+        return {
+            "primary": settings.serialize_maybe(self.primary),
+            "secondary": {
+                n.serialize(settings): c.serialize(settings)
+                for n, c in six.itervalues(self.secondary)
+
+            },
+        }
+
+class CodeLoc:
+    def __init__(self, settings, file_, line):
+        self._settings = settings
+        self.file = file_
+        self.line = line
+
+    def serialize(self, settings):
+        return {
+            "file": settings.relpath(self.file),
+            "line": self.line,
+        }

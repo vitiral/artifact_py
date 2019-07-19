@@ -39,6 +39,14 @@ class Settings:
         """Return the relative paths to the root directory."""
         return [self.relpath(p) for p in paths]
 
+    def serialize_list(self, lst):
+        return [v.serialize(self) for v in lst]
+
+    def serialize_maybe(self, value):
+        if value is None:
+            return value
+        return value.serialize(self)
+
     def serialize(self):
         return {
             'root_dir': os.path.dirname(self.root_file),

@@ -50,13 +50,3 @@ def joinabs(a, b):
 
 def joinabs_all(root_dir, paths):
     return [joinabs(root_dir, p) for p in paths]
-
-
-def serialize_list(lst):
-    return [v.serialize() for v in lst]
-
-
-def serialize(value):
-    if value is None:
-        return value
-    return value.serialize()
