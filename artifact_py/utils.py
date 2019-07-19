@@ -1,4 +1,9 @@
+from __future__ import unicode_literals
 import os
+
+from collections import OrderedDict
+import six
+from anchor_txt.utils import to_unicode
 
 
 class KeyCmp(object):
@@ -50,3 +55,20 @@ def joinabs(a, b):
 
 def joinabs_all(root_dir, paths):
     return [joinabs(root_dir, p) for p in paths]
+
+
+def ordered_recurse(value):
+    if isinstance(value, list):
+        return [ordered_recurse(v) for v in value]
+    if isinstance(value, dict):
+        items = sorted(
+            (
+                (key, ordered_recurse(value))
+                for key, value in six.iteritems(value)
+            ),
+            key=lambda i: i[0],
+        )
+        return OrderedDict(items)
+
+    return value
+

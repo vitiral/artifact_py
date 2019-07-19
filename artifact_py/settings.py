@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import os
 import six
 
@@ -33,7 +34,7 @@ class Settings:
 
     def relpath(self, path):
         """Get the relative path from the settings root."""
-        return os.path.relpath(path, start=self.root_dir)
+        return utils.to_unicode(os.path.relpath(path, start=self.root_dir))
 
     def relpath_all(self, paths):
         """Return the relative paths to the root directory."""

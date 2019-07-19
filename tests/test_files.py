@@ -2,7 +2,10 @@ import os
 import yaml
 import unittest
 
+import anchor_txt
+
 from artifact_py import load
+from artifact_py import utils
 
 SCRIPT_PATH = os.path.realpath(__file__)
 TEST_DIR = os.path.dirname(SCRIPT_PATH)
@@ -15,7 +18,8 @@ def read(path):
 
 def read_yaml(path):
     with open(path) as f:
-        return yaml.safe_load(f)
+        out = yaml.safe_load(f.read())
+    return anchor_txt.utils.to_unicode_recurse(out)
 
 
 class TestArtifactsOnly:

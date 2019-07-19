@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import copy
 
 import six
@@ -24,7 +25,7 @@ def from_root_file(root_file):
     )
     return project.Project(
         settings=p_settings,
-        artifacts={n: b.build(p_settings) for n, b in six.iteritems(artifacts_builder.builders)},
+        artifacts=[b.build(p_settings) for b in artifacts_builder.builders],
         contents=root_section.contents,
         sections=project_sections,
     )
@@ -73,7 +74,5 @@ def load_artifacts_builder(project_sections, settings):
 
     for art in builders:
         art.set_parts(set(graph.neighbors(art.name)))
-
-    builders = {b.name: b for b in builders}
 
     return artifact.ArtifactsBuilder(builders=builders, graph=graph)

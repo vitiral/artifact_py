@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 """
 For types and methods associated with the completion ratio of artifacts.
 """

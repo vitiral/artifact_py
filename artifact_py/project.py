@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 import anchor_txt
 import six
 
@@ -13,5 +14,5 @@ class Project:
     def serialize(self):
         return {
             "settings": self.settings.serialize(),
-            "artifacts": self.settings.serialize_list(six.itervalues(self.artifacts)),
+            "artifacts": self.settings.serialize_list(self.artifacts),
         }
