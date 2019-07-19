@@ -1,2 +1,3 @@
 anchor_txt
+networkx
 six

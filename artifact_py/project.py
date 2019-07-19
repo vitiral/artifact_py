@@ -4,9 +4,10 @@ from . import utils
 
 
 class Project:
-    def __init__(self, settings, artifacts):
+    def __init__(self, settings, artifacts, contents, sections):
         self.settings = settings
         self.artifacts = artifacts
+        self.sections = sections
 
     def serialize(self):
         return {
