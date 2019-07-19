@@ -24,6 +24,11 @@ NAME_VALID_STR = r"(?P<type>REQ|SPC|TST)-(?:[{0}]+-)*(?:[{0}]+)".format(
     NAME_VALID_CHARS)
 NAME_VALID_RE = re.compile(r"^{}$".format(NAME_VALID_STR), re.IGNORECASE)
 
+
+SUB_PART_VALID_STR = r"(?:tst-)?[{}]+".format(NAME_VALID_CHARS)
+SUB_PART_VALID_RE = re.compile(r"^{}$".format(SUB_PART_VALID_STR), re.IGNORECASE)
+
+
 REQ = "REQ"
 SPC = "SPC"
 TST = "TST"
@@ -53,6 +58,24 @@ class Name(utils.KeyCmp):
         return self.raw
 
 
-def new(raw):
-    """Shortcut method."""
-    return Name.from_str(raw)
+class SubPart(utils.KeyCmp):
+    def __init__(self, key, raw):
+        super(SubPart, self).__init__(key=key)
+        self.raw = raw
+
+    def is_tst(self):
+        return self.key.startswith("TST")
+
+    @classmethod
+    def from_str(cls, raw):
+        match = SUB_PART_VALID_RE.match(raw)
+        if not match:
+            raise ValueError("Invalid subparts: {}".format(raw))
+
+        return cls(key=raw.upper(), raw=raw)
+
+    def __repr__(self):
+        return self.raw
+
+    def serialize(self, _settings):
+        return self.raw

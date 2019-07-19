@@ -35,10 +35,7 @@ def from_root_file(root_file):
         sections=root_section.sections,
         file_=root_file,
     )
-    artifacts_builder = load_artifacts_builder(
-        project_sections=project_sections,
-        settings=p_settings,
-    )
+    artifacts_builder = load_artifacts_builder(project_sections)
     return project.Project(
         settings=p_settings,
         artifacts=[b.build(p_settings) for b in artifacts_builder.builders],
@@ -74,7 +71,7 @@ def load_project_sections(sections, file_):
     return project_sections
 
 
-def load_artifacts_builder(project_sections, settings):
+def load_artifacts_builder(project_sections):
     graph = nx.DiGraph()
 
     builders = [
@@ -92,3 +89,87 @@ def load_artifacts_builder(project_sections, settings):
         art.set_parts(set(graph.neighbors(art.name)))
 
     return artifact.ArtifactsBuilder(builders=builders, graph=graph)
+
+
+def determine_completed(artifacts_builder, impls):
+    pass
+    # // If there is a cycle we just return everything as 0% complete for spc+tst
+    # // We ignore `done` because there will be an ERROR lint later anyway.
+    # let uncomputed = || {
+    #     impls
+    #         .keys()
+    #         .map(|n| (n.clone(), Completed::default()))
+    #         .collect()
+    # };
+    # let sorted_graph = match petgraph::algo::toposort(&graphs.full, None) {
+    #     Ok(s) => s,
+    #     // cycle detected
+    #     Err(_) => return uncomputed(),
+    # };
+
+    # // convert to by-id
+    # let impls: IndexMap<GraphId, &_> = impls
+    #     .iter()
+    #     .map(|(name, v)| (graphs.lookup_id[name], v))
+    #     .collect();
+
+    # /// compute ratio but ignore count=0
+    # fn ratio(value: f64, count: usize) -> f64 {
+    #     if count == 0 {
+    #         0.0
+    #     } else {
+    #         value / count as f64
+    #     }
+    # }
+
+    # let mut implemented: IndexMap<GraphId, f64> = IndexMap::with_capacity(impls.len());
+    # let mut tested: IndexMap<GraphId, f64> = IndexMap::with_capacity(impls.len());
+
+    # for id in sorted_graph.iter().rev() {
+    #     let name = expect!(graphs.lookup_name.get(id));
+    #     let sub = match subnames.get(name) {
+    #         Some(s) => s,
+    #         None => continue, // Will cause warning lint error.
+    #     };
+    #     let impl_ = expect!(impls.get(id));
+    #     let (mut count_spc, mut value_spc, mut count_tst, mut value_tst) = impl_.to_statistics(sub);
+
+    #     if matches!(graphs.lookup_name[id].ty, Type::TST) {
+    #         for part_id in graphs.full.neighbors(*id) {
+    #             value_spc += implemented[&part_id];
+    #             count_spc += 1;
+    #         }
+    #         value_tst = value_spc;
+    #         count_tst = count_spc;
+    #     } else {
+    #         for part_id in graphs.full.neighbors(*id) {
+    #             value_tst += tested[&part_id];
+    #             count_tst += 1;
+
+    #             if !matches!(graphs.lookup_name[&part_id].ty, Type::TST) {
+    #                 // TST's dont contribute towards spc in other types
+    #                 value_spc += implemented[&part_id];
+    #                 count_spc += 1;
+    #             }
+    #         }
+    #     }
+    #     tested.insert(*id, ratio(value_tst, count_tst));
+    #     implemented.insert(*id, ratio(value_spc, count_spc));
+    # }
+
+    # debug_assert_eq!(impls.len(), implemented.len());
+    # debug_assert_eq!(impls.len(), tested.len());
+    # let out: IndexMap<Name, Completed> = implemented
+    #     .iter()
+    #     .map(|(id, spc)| {
+    #         // throw away digits after 1000 significant digit
+    #         // (note: only at end of all calculations!)
+    #         let compl = Completed {
+    #             spc: round_ratio(*spc),
+    #             tst: round_ratio(tested[id]),
+    #         };
+    #         (graphs.lookup_name[id].clone(), compl)
+    #     })
+    #     .collect();
+    # debug_assert_eq!(impls.len(), out.len());
+    # out
