@@ -31,14 +31,22 @@ class Settings:
                    exclude_code_paths=exclude_code_paths,
                    extra=dct)
 
+    def relpath(self, path):
+        """Get the relative path from the settings root."""
+        return os.path.relpath(path, start=self.root_dir)
+
+    def relpath_all(self, paths):
+        """Return the relative paths to the root directory."""
+        return [self.relpath(p) for p in paths]
+
     def serialize(self):
         return {
             'root_dir':
             os.path.dirname(self.root_file),
             'code_paths':
-            utils.relpath_all(self.root_dir, self.code_paths),
+            self.relpath_all(self.code_paths),
             'exclude_code_paths':
-            utils.relpath_all(self.root_dir, self.exclude_code_paths),
+            self.relpath_all(self.exclude_code_paths),
             'extra':
             self.extra,
         }

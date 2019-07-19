@@ -1,11 +1,13 @@
+from . import utils
+
 class Artifact:
-    def __init__(self, settings, name, file_, partof, section, subnames, done):
+    def __init__(self, settings, name, file_, partof, section, subparts, done):
         self._settings = settings
         self.name = name
         self.file = file_
         self.partof = partof
         self.section = section
-        self.subnames = subnames
+        self.subparts = subparts
         self.done = done
 
         # TODO: calculated
@@ -16,11 +18,11 @@ class Artifact:
     def serialize(self):
         return {
             "name": self.name.serialize(),
-            "file": self.file,  # TODO: remove root
-            "partof": sorted(utils.serialize_all(self.partof)),
+            "file": self._settings.relpath(self.file),
+            "partof": sorted(utils.serialize_list(self.partof)),
             "text": self.section.to_lines(),
-            "subnames": sorted(utils.serialize_all(self.subnames)),
-            "done": self.done.serialize(),
+            "subparts": sorted(self.subparts),
+            "done": utils.serialize(self.done),
 
             # TODO: calculated
             # "parts": sorted(utils.serialize_all(self.parts)),
@@ -31,12 +33,12 @@ class Artifact:
 
 class ArtifactBuilder:
     """Intermediate artifact."""
-    def __init__(self, name, file_, section, partof, subnames, done, extra):
+    def __init__(self, name, file_, section, partof, subparts, done, extra):
         self.name = name
         self.file = file_
         self.section = section
         self.partof = partof
-        self.subnames = subnames
+        self.subparts = subparts
         self.done = done
         self.extra = extra
 
@@ -59,7 +61,7 @@ class ArtifactBuilder:
             file_=file_,
             section=section,
             partof=attributes.pop('partof', set()),
-            subnames=attributes.pop('subnames', set()),
+            subparts=attributes.pop('subparts', set()),
             done=attributes.pop('done', None),
             extra=attributes,
         )
@@ -70,7 +72,7 @@ class ArtifactBuilder:
             name=self.name,
             file_=self.file,
             partof=self.partof,
-            subnames=self.subnames,
+            subparts=self.subparts,
             section=self.section,
             done=self.done,
         )

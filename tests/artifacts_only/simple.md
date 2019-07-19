@@ -21,6 +21,5 @@ You can link to other artifacts with [SPC-other], or to subparts with
 [SPC-simple.foo]. The link table will be automatically generated when this
 artifact is exported.
 
-
 # Other Artifact (SPC-other) {#SPC-other}
 This is another artifact for demonstration purposes.

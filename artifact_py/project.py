@@ -1,4 +1,5 @@
 import anchor_txt
+import six
 
 from . import utils
 
@@ -12,5 +13,5 @@ class Project:
     def serialize(self):
         return {
             "settings": self.settings.serialize(),
-            "artifacts": utils.serialize_list(self.artifacts),
+            "artifacts": utils.serialize_list(six.itervalues(self.artifacts)),
         }
