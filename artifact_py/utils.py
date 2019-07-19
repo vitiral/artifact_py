@@ -1,3 +1,4 @@
+import os
 
 class KeyCmp(object):
     """An object which is key comparable."""
@@ -13,3 +14,16 @@ class KeyCmp(object):
             raise TypeError(type(other))
         return self.key.__cmp__(other.key)
 
+
+def abspath(path):
+    if '~' in path:
+        raise ValueError("Path cannot use home directory '~'")
+    return os.path.abspath(path)
+
+
+def joinabs(a, b):
+    return abspath(os.path.join(a, b))
+
+
+def joinabs_all(root_dir, paths):
+    return [joinabs(root_dir, p) for p in paths]
