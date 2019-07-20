@@ -27,6 +27,7 @@ from . import artifact
 from . import name
 from . import code
 from . import completion
+from . import utils
 
 SETTINGS_KEY = 'artifact'
 
@@ -132,14 +133,6 @@ def load_artifacts_builder(project_sections):
     return artifact.ArtifactsBuilder(builders=builders, graph=graph)
 
 
-def ratio(value, count):
-    """compute ratio but ignore count=0"""
-    if count == 0:
-        return 0.0
-    else:
-        return value / count
-
-
 def update_completion(artifacts_builder, code_impls):
     builder_map = artifacts_builder.builder_map
     graph = artifacts_builder.graph
@@ -170,8 +163,8 @@ def update_completion(artifacts_builder, code_impls):
                     value_spc += specified[neighbor]
                     count_spc += 1
 
-        specified[name] = ratio(value_spc, count_spc)
-        tested[name] = ratio(value_tst, count_tst)
+        specified[name] = utils.ratio(value_spc, count_spc)
+        tested[name] = utils.ratio(value_tst, count_tst)
 
     for builder in artifacts_builder.builders:
         comp = completion.Completion(

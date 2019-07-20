@@ -14,7 +14,7 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
-from __future__ import unicode_literals
+from __future__ import unicode_literals, division
 import os
 
 from collections import OrderedDict
@@ -87,15 +87,15 @@ def ordered_recurse(value):
     return value
 
 
-def write_lines(lines, output_file):
-    with open(output_file, 'w') as fd:
-        for line in lines:
-            fd.write(line)
-            fd.write('\n')
+def write_lines(lines, output):
+    for line in lines:
+        output.write(line)
+        output.write('\n')
 
-        fd.flush()
-        fd.close()
-        os.fsync(fd)
+
+def flush_output(output):
+    output.flush()
+    os.fsync(output)
 
 
 def ensure_str(name, value, allow_none=False):
@@ -117,3 +117,11 @@ def ensure_list(name, value, itemtype=None):
                     name, itemtype, item))
 
     return value
+
+
+def ratio(value, count):
+    """compute ratio but ignore count=0"""
+    if count == 0:
+        return 0.0
+    else:
+        return value / count

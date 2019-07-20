@@ -30,6 +30,7 @@ class Project:
         self.contents = contents
 
     def serialize(self):
+        # TODO: dump the sections+contents
         return {
             "settings": self.settings.serialize(),
             "artifacts": self.settings.serialize_list(self.artifacts),

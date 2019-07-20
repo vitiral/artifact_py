@@ -101,7 +101,9 @@ class ArtifactBuilder:
         subparts = utils.ensure_list(name_raw + ' subparts',
                                      attributes.pop('subparts', []))
         subparts = {SubPart.from_str(s) for s in subparts}
-        done = utils.ensure_str(name_raw + ' done', attributes.pop('done', None), allow_none=True)
+        done = utils.ensure_str(name_raw + ' done',
+                                attributes.pop('done', None),
+                                allow_none=True)
 
         attributes.pop('artifact', None)  # Normal settings. Ignore.
         return cls(
