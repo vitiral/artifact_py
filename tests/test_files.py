@@ -40,6 +40,12 @@ class TestArtifactsOnly:
     def test_settings(self):
         self.run_test('simple')
 
+    def test_settings_bottom(self):
+        self.run_test('settings_bottom')
+
+    def test_extra_attributes(self):
+        self.run_test('extra_attributes')
+
 
 class TestProjects:
     DIR = os.path.join(TEST_DIR, "projects")

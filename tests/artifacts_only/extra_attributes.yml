@@ -1,0 +1,46 @@
+settings:
+    code_paths:
+        - src
+    exclude_code_paths: []
+    extra:
+        extra: here
+    code_url: null
+artifacts:
+    - done: null
+      completion: {spc: 0.0, tst: 0.0}
+      impl:
+          primary: []
+          secondary: {}
+      file: extra_attributes.md
+      name: SPC-extra
+      partof:
+        - SPC-other
+      parts: []
+      subparts: []
+      text:
+          - "# SPC-extra {#SPC-extra}"
+          - "```yaml @"
+          - "partof:"
+          - "  - SPC-other"
+          - "got-extra: true"
+          - "```"
+          - ""
+      extra:
+          got-extra: true
+    - done: null
+      completion: {spc: 0.0, tst: 0.0}
+      impl:
+          primary: []
+          secondary: {}
+      file: extra_attributes.md
+      name: SPC-other
+      partof: []
+      parts:
+          - SPC-extra
+      subparts: []
+      text:
+        - "# SPC-other {#SPC-other}"
+        - "other one, nothin."
+        - ""
+      extra: {}
+

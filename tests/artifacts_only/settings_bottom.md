@@ -1,9 +1,9 @@
 Some stuff
 
-# SPC-something
+# Some spec (SPC-something) {#SPC-something}
 this is a spec
 
-# SPC-other
+# Other spec (SPC-other) {#SPC-other}
 another spec
 
 ```yaml @

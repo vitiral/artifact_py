@@ -15,8 +15,9 @@ artifacts:
       parts: []
       subparts: []
       text:
-        - "# SPC-something"
+        - "# Some spec (SPC-something) {#SPC-something}"
         - "this is a spec"
+        - ""
       extra: {}
     - done: null
       completion: {spc: 0.0, tst: 0.0}
@@ -29,7 +30,7 @@ artifacts:
       parts: []
       subparts: []
       text:
-        - "# SPC-other"
+        - "# Other spec (SPC-other) {#SPC-other}"
         - "another spec"
         - ""
         - "```yaml @"
