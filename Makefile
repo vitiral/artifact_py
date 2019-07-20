@@ -23,6 +23,7 @@ init:
 
 fix:
 	py3/bin/yapf --in-place -r artifact_py tests
+	py3/bin/python -m artifact_py export -i --format md
 
 lint:
 	py3/bin/pylint artifact_py

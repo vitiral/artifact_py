@@ -23,6 +23,7 @@ import yaml
 
 from . import utils
 from . import load
+from . import dump
 
 
 def main(argv):
@@ -46,7 +47,7 @@ def main(argv):
         '-i',
         '--inplace',
         action='store_true',
-        help='whether to export inplace. Only valid with --format=md')
+        help='whether to export inplace. Only valid with --format md')
     parser_export.add_argument(
         '--format',
         help='format to output to on of [json, yaml, md]',
@@ -84,7 +85,7 @@ def main(argv):
             elif args.format == 'yaml':
                 yaml.safe_dump(project.to_dict(), output)
             elif args.format == 'md':
-                utils.write_lines(project.to_lines(), output)
+                utils.write_lines(dump.dump_project(project), output)
             else:
                 print("Unrecognized --format:", args.format)
                 parser.print_help()
@@ -112,3 +113,5 @@ def main(argv):
         print("Unrecognized mode:", args.mode)
         parser.print_help()
         sys.exit(1)
+
+    return 0

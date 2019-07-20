@@ -29,6 +29,9 @@ artifact:
     - tests/artifacts_only/
     - tests/projects/
 
+  code_url:
+    "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
+
 subparts:
   - artifact
   - settings
@@ -87,3 +90,7 @@ at your option.
 Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
+
+[SPC-design.artifact]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L28
+[SPC-design.aritfact_builder]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L75
+
