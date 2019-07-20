@@ -26,6 +26,7 @@ from . import project
 from . import artifact
 from . import name
 from . import code
+from . import completion
 
 
 def from_root_file(root_file):
@@ -33,7 +34,7 @@ def from_root_file(root_file):
     p_settings = settings.Settings.from_dict(
         root_section.attributes.get('artifact', {}), root_file)
 
-    impls = code.find_impls(p_settings)
+    code_impls = code.find_impls(p_settings)
 
     project_sections = load_project_sections(
         sections=root_section.sections,
@@ -42,6 +43,8 @@ def from_root_file(root_file):
     )
 
     artifacts_builder = load_artifacts_builder(project_sections)
+    update_completion(artifacts_builder, code_impls)
+
     return project.Project(
         settings=p_settings,
         artifacts=[b.build() for b in artifacts_builder.builders],
@@ -111,7 +114,7 @@ def ratio(value, count):
         return value / count
 
 
-def determine_completed(artifacts_builder, code_impls):
+def update_completeion(artifacts_builder, code_impls):
     builder_map = artifacts_builder.builder_map
     graph = artifacts_builder.graph
 
@@ -141,22 +144,12 @@ def determine_completed(artifacts_builder, code_impls):
                     value_spc += specified[neighbor]
                     count_spc += 1
 
-        tested[name] = ratio(value_tst, count_tst)
         specified[name] = ratio(value_spc, count_spc)
+        tested[name] = ratio(value_tst, count_tst)
 
-    # debug_assert_eq!(impls.len(), implemented.len());
-    # debug_assert_eq!(impls.len(), tested.len());
-    # let out: IndexMap<Name, Completed> = implemented
-    #     .iter()
-    #     .map(|(id, spc)| {
-    #         // throw away digits after 1000 significant digit
-    #         // (note: only at end of all calculations!)
-    #         let compl = Completed {
-    #             spc: round_ratio(*spc),
-    #             tst: round_ratio(tested[id]),
-    #         };
-    #         (graphs.lookup_name[id].clone(), compl)
-    #     })
-    #     .collect();
-    # debug_assert_eq!(impls.len(), out.len());
-    # out
+    for builder in artifacts_builder.builders:
+        comp = completion.Completion(
+            spc=round(specified[builder.name], 3),
+            tst=round(tested[builder.name], 3),
+        )
+        builder.set_completion(comp)

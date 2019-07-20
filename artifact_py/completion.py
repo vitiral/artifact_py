@@ -25,6 +25,18 @@ from . import name
 SUB_PART_VALID_RE = re.compile(
     r"^(?:tst-)?[{}]+$".format(name.NAME_VALID_CHARS), re.IGNORECASE)
 
+class Completion(utils.KeyCmp):
+    def __init__(self, spc, tst):
+        super(Completed, self).__init__(key=(spc, tst))
+        self.spc = spc
+        self.tst = tst
+
+    def serialize(self, _settings):
+        return {
+            "spc": self.spc,
+            "tst": self.tst,
+        }
+
 
 class SubPart(utils.KeyCmp):
     def __init__(self, key, raw):
@@ -56,38 +68,6 @@ class ImplDone:
     def serialize(self, _settings):
         return self.raw
 
-
-class ImplCode:
-    """Implemented in code.
-
-    primary: CodeLoc or None
-    secondary: dict[SubPart, CodeLoc]
-    """
-    def __init__(self, primary, secondary):
-        self.primary = primary
-        self.secondary = secondary
-
-    def serialize(self, settings):
-        return {
-            "primary": settings.serialize_maybe(self.primary),
-            "secondary": {
-                n.serialize(settings): c.serialize(settings)
-                for n, c in six.itervalues(self.secondary)
-            },
-        }
-
-
-class CodeLoc:
-    def __init__(self, settings, file_, line):
-        self._settings = settings
-        self.file = file_
-        self.line = line
-
-    def serialize(self, settings):
-        return {
-            "file": settings.relpath(self.file),
-            "line": self.line,
-        }
 
 
 def impl_to_statistics(impl, subnames):

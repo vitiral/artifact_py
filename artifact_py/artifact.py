@@ -33,6 +33,7 @@ class Artifact:
             impl,
             done,
             parts,
+            completion,
     ):
         self.name = name
         self.file = file_
@@ -42,9 +43,7 @@ class Artifact:
         self.impl = impl
         self.done = done
         self.parts = parts
-
-        # TODO: calculated
-        # self.completed = completed
+        self.completion = completion
 
     def serialize(self, settings):
         return {
@@ -56,9 +55,7 @@ class Artifact:
             "done": settings.serialize_maybe(self.done),
             "parts": sorted(settings.serialize_list(self.parts)),
             "impl": self.impl.serialize(settings),
-
-            # TODO: calculated
-            # "completed": self.completed.serialize(settings),
+            "completion": self.completion.serialize(settings),
         }
 
 
@@ -76,7 +73,7 @@ class ArtifactBuilder:
         self.extra = extra
 
         self.parts = None
-        self.completed = None
+        self.completion = None
 
     @classmethod
     def from_attributes(cls, attributes, name, file_, impl, section):
@@ -108,8 +105,12 @@ class ArtifactBuilder:
     def set_parts(self, parts):
         self.parts = parts
 
+    def set_completion(self, completion):
+        self.completion = completion
+
     def build(self):
         assert self.parts is not None, "must set_parts"
+        assert self.completion is not None, "must set_completion"
 
         return Artifact(
             name=self.name,
