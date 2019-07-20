@@ -35,6 +35,7 @@ class Artifact:
             done,
             parts,
             completion,
+            extra,
     ):
         self.name = name
         self.file = file_
@@ -45,6 +46,7 @@ class Artifact:
         self.done = done
         self.parts = parts
         self.completion = completion
+        self.extra = extra
 
     def serialize(self, settings):
         return {
@@ -57,6 +59,7 @@ class Artifact:
             "parts": sorted(settings.serialize_list(self.parts)),
             "impl": self.impl.serialize(settings),
             "completion": self.completion.serialize(settings),
+            "extra": self.extra,
         }
 
     def to_lines(self):
@@ -95,6 +98,7 @@ class ArtifactBuilder:
             SubPart.from_str(s)
             for s in attributes.pop('subparts', [])
         }
+        attributes.pop('artifact', None)  # Normal settings. Ignore.
         return cls(
             name=name,
             file_=file_,
@@ -126,6 +130,7 @@ class ArtifactBuilder:
             done=self.done,
             parts=self.parts,
             completion=self.completion,
+            extra=self.extra,
         )
 
     def __repr__(self):

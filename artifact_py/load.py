@@ -28,9 +28,15 @@ from . import name
 from . import code
 from . import completion
 
+SETTINGS_KEY = 'artifact'
+
 
 def from_root_file(root_file):
     root_section = anchor_txt.Section.from_md_path(root_file)
+    p_settings = find_settings(root_section, root_file)
+    if p_settings is None:
+        p_settings = settings.Settings.from_dict({}, root_file)
+
     p_settings = settings.Settings.from_dict(
         root_section.attributes.get('artifact', {}), root_file)
 
@@ -60,6 +66,19 @@ def from_root_file(root_file):
         sections=project_sections,
         contents=root_section.contents,
     )
+
+def find_settings(section, root_file):
+    """Walk through all sections looking for the artifact settings."""
+    if SETTINGS_KEY in section.attributes:
+        return settings.Settings.from_dict(
+            section.attributes['artifact'], root_file)
+
+    for section in section.sections:
+        p_settings = find_settings(section, root_file)
+        if p_settings:
+            return p_settings
+
+    return None
 
 
 def load_project_sections(sections, file_, code_impls):

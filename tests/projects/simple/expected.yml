@@ -56,6 +56,7 @@ artifacts:
         - "Simple with some code links"
         - ""
         - ""
+      extra: {}
     - done: null
       completion: {spc: 0, tst: 0}
       file: README.md
@@ -75,3 +76,4 @@ artifacts:
         - "  - SPC-simple"
         - "```"
         - ""
+      extra: {}

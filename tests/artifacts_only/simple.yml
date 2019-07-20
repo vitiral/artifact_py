@@ -33,6 +33,7 @@ artifacts:
         - "[SPC-simple.foo]. The link table will be automatically generated when this"
         - "artifact is exported."
         - ""
+      extra: {}
     - done: null
       completion: {spc: 0.0, tst: 0.0}
       impl:
@@ -52,3 +53,4 @@ artifacts:
         - "```"
         - "This is another artifact for demonstration purposes."
         - ""
+      extra: {}
