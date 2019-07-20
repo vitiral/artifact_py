@@ -42,43 +42,14 @@ artifacts:
           - tst-exclude
           - tst-ignore
           - tst-simple
-      text:
-        - "# Simple Test Doc (SPC-simple) {#SPC-simple}"
-        - "```yaml @"
-        - "subparts:"
-        - "  - simple"
-        - "  - script"
-        - "  - deep"
-        - "  - tst-simple"
-        - "  - tst-exclude"
-        - "  - tst-ignore"
-        - "```"
-        - "Simple with some code links"
-        - ""
-        - ""
       extra: {}
     - done: null
       completion: {spc: 0, tst: 0}
       file: README.md
       name: SPC-notimpl
-      impl:
-          primary: []
-          secondary: {}
+      impl: null
       partof:
           - SPC-simple
       parts: []
       subparts: []
-      text:
-
-        - "# Not implemented (SPC-notimpl) {#SPC-notimpl}"
-        - "```yaml @"
-        - "partof:"
-        - "  - SPC-simple"
-        - "```"
-        - ""
-        - ""
-        - ""
-        - "[SPC-away]: https://this.goes.away.com"
-        - "[SPC-away.subpart]: https://this.goes.away.com"
-        - ""
       extra: {}

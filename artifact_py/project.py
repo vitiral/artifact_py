@@ -23,11 +23,11 @@ from . import utils
 
 
 class Project:
-    def __init__(self, settings, artifacts, sections, contents):
+    def __init__(self, settings, artifacts, root_section, impls):
         self.settings = settings
         self.artifacts = artifacts
-        self.sections = sections
-        self.contents = contents
+        self.root_section = root_section
+        self.impls = impls
 
     def serialize(self):
         # TODO: dump the sections+contents
@@ -37,9 +37,4 @@ class Project:
         }
 
     def to_lines(self):
-        lines = []
-        for content in self.contents:
-            lines.extend(content.to_lines())
-        for section in self.sections:
-            lines.extend(section.to_lines())
-        return lines
+        return self.root_section.to_lines()

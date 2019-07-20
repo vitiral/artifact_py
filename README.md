@@ -28,6 +28,8 @@ artifact:
   exclude_code_paths:
     - tests/artifacts_only/
     - tests/projects/
+    - tests/test_code.py
+
 
   code_url:
     "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"

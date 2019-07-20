@@ -6,37 +6,19 @@ settings:
 artifacts:
     - done: null
       completion: {spc: 0.0, tst: 0.0}
-      impl:
-          primary: []
-          secondary: {}
+      impl: null
       file: settings_bottom.md
       name: SPC-something
       partof: []
       parts: []
       subparts: []
-      text:
-        - "# Some spec (SPC-something) {#SPC-something}"
-        - "this is a spec"
-        - ""
       extra: {}
     - done: null
       completion: {spc: 0.0, tst: 0.0}
-      impl:
-          primary: []
-          secondary: {}
+      impl: null
       file: settings_bottom.md
       name: SPC-other
       partof: []
       parts: []
       subparts: []
-      text:
-        - "# Other spec (SPC-other) {#SPC-other}"
-        - "another spec"
-        - ""
-        - "```yaml @"
-        - "artifact:"
-        - "    code_paths:"
-        - "      - src/"
-        - "```"
-        - ""
       extra: {}

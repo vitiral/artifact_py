@@ -32,110 +32,153 @@ from . import utils
 SETTINGS_KEY = 'artifact'
 
 
+class ProjectBuilder:
+    def __init__(self, root_file, root_section):
+        self.root_file = root_file
+        self.root_section = root_section
+        self.settings = None
+        self.impls = None
+        self.builders = []
+        self.builder_map = None
+        self.graph = None
+
+    def try_add_builder(self, section):
+        if not section.header:
+            # root section is not an artifact
+            return
+
+        try:
+            art_name = name.Name.from_str(section.header.anchor)
+        except ValueError:
+            # no valid anchor, not an artifact
+            return
+
+        builder = artifact.ArtifactBuilder.from_attributes(
+            attributes=section.attributes,
+            name=art_name,
+            file_=self.root_file,
+        )
+
+        self.builders.append(builder)
+
+    def update_builder_map(self):
+        self.builder_map = {b.name: b for b in self.builders}
+
+    def set_settings(self, settings):
+        if self.settings:
+            raise ValueError("two settings found at " + self.root_file)
+        self.settings = settings
+
+    def set_impls(self, impls):
+        self.impls = impls
+
+        for builder in self.builders:
+            impl = impls.get(builder.name)
+            if impl:
+                builder.set_impl(impl)
+
+    def set_graph(self, graph):
+        self.graph = graph
+
+    def build(self):
+        assert self.settings is not None
+        assert self.impls is not None
+        assert self.builder_map is not None
+        assert self.graph is not None
+
+        artifacts = [b.build() for b in self.builders]
+
+        return project.Project(settings=self.settings,
+                               artifacts=artifacts,
+                               root_section=self.root_section,
+                               impls=self.impls)
+
+
 def from_root_file(root_file):
     root_section = anchor_txt.Section.from_md_path(root_file)
-    p_settings = find_settings(root_section, root_file)
-    if p_settings is None:
-        p_settings = settings.Settings.from_dict({}, root_file)
+    project_builder = load_project_builder(root_section, root_file)
 
-    code_impls = code.find_impls(p_settings)
+    settings = find_settings(root_section, root_file)
 
-    project_sections = load_project_sections(
-        sections=root_section.sections,
-        file_=root_file,
-        code_impls=code_impls,
-    )
+    project_builder.set_impls(code.find_impls(settings))
 
-    artifacts_builder = load_artifacts_builder(project_sections)
-    update_completion(artifacts_builder, code_impls)
+    load_graph_and_parts(project_builder)
+    update_completion(project_builder)
 
-    artifacts = [b.build() for b in artifacts_builder.builders]
-    artifact_map = {a.name: a for a in artifacts}
+    return project_builder.build()
 
-    project_sections = [
-        artifact_map[section.name]
-        if isinstance(section, artifact.ArtifactBuilder) else section
-        for section in project_sections
-    ]
 
-    return project.Project(
-        settings=p_settings,
-        artifacts=artifacts,
-        sections=project_sections,
-        contents=root_section.contents,
-    )
+def load_project_builder(root_section, root_file):
+    project_builder = ProjectBuilder(root_file=root_file,
+                                     root_section=root_section)
+    _recurse_section(project_builder, root_section)
+    if not project_builder.settings:
+        project_builder.settings = settings.Settings.from_dict(
+            {},
+            root_file,
+        )
+    project_builder.update_builder_map()
+    return project_builder
+
+
+def _recurse_section(project_builder, section):
+    try_settings = try_get_settings(section, project_builder.root_file)
+    if try_settings:
+        project_builder.set_settings(try_settings)
+
+    project_builder.try_add_builder(section)
+
+    for child in section.sections:
+        _recurse_section(project_builder, child)
+
+
+def try_get_settings(section, root_file):
+    if SETTINGS_KEY in section.attributes:
+        return settings.Settings.from_dict(section.attributes[SETTINGS_KEY],
+                                           root_file)
+    return None
 
 
 def find_settings(section, root_file):
+    out = _find_settings_recurse(section, root_file)
+    if out is None:
+        return settings.Settings.from_dict({}, root_file)
+    return out
+
+
+def _find_settings_recurse(section, root_file):
     """Walk through all sections looking for the artifact settings."""
     if SETTINGS_KEY in section.attributes:
         return settings.Settings.from_dict(section.attributes[SETTINGS_KEY],
                                            root_file)
 
     for section in section.sections:
-        p_settings = find_settings(section, root_file)
-        if p_settings:
-            return p_settings
+        out = _find_settings_recurse(section, root_file)
+        if out:
+            return out
 
     return None
 
 
-def load_project_sections(sections, file_, code_impls):
-    """Load artifacts from the sections.
-    """
-
-    # project sections can either be:
-    # - a raw section
-    # - an ArtifactBuilder, which contains a section
-    project_sections = []
-
-    for section in sections:
-        try:
-            art_name = name.Name.from_str(section.header.anchor)
-        except ValueError:
-            project_sections.append(section)
-            continue
-
-        impl = code_impls.get(art_name)
-        if not impl:
-            impl = code.ImplCode.new()
-
-        art_im = artifact.ArtifactBuilder.from_attributes(
-            attributes=section.attributes,
-            name=art_name,
-            file_=file_,
-            impl=impl,
-            section=section,
-        )
-
-        project_sections.append(art_im)
-
-    return project_sections
-
-
-def load_artifacts_builder(project_sections):
+def load_graph_and_parts(project_builder):
     graph = nx.DiGraph()
 
-    builders = [
-        s for s in project_sections if isinstance(s, artifact.ArtifactBuilder)
-    ]
-
     # create the graph
-    for art in builders:
+    for art in project_builder.builders:
         graph.add_node(art.name)
 
         for part in art.partof:
             graph.add_edge(part, art.name)
 
-    for art in builders:
+    for art in project_builder.builders:
         art.set_parts(set(graph.neighbors(art.name)))
 
-    return artifact.ArtifactsBuilder(builders=builders, graph=graph)
+    project_builder.set_graph(graph)
 
 
-def update_completion(artifacts_builder, code_impls):
-    builder_map = artifacts_builder.builder_map
-    graph = artifacts_builder.graph
+def update_completion(project_builder):
+    builder_map = project_builder.builder_map
+    graph = project_builder.graph
 
     sorted_graph = nx.algorithms.dag.topological_sort(graph)
     sorted_graph = list(sorted_graph)
@@ -166,7 +209,7 @@ def update_completion(artifacts_builder, code_impls):
         specified[name] = utils.ratio(value_spc, count_spc)
         tested[name] = utils.ratio(value_tst, count_tst)
 
-    for builder in artifacts_builder.builders:
+    for builder in project_builder.builders:
         comp = completion.Completion(
             spc=round(specified[builder.name], 3),
             tst=round(tested[builder.name], 3),

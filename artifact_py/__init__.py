@@ -88,13 +88,14 @@ def main(argv):
                 output = sys.stdout
 
             if args.format == 'json':
-                json.dump(project.to_dict(), output)
+                json.dump(project.serialize(), output)
             elif args.format == 'yaml':
-                yaml.safe_dump(project.to_dict(), output)
+                yaml.safe_dump(project.serialize(), output)
             elif args.format == 'md':
                 utils.write_lines(dump.dump_project(project), output)
             else:
-                return fail("Unrecognized --format: " + args.format, print_help=True)
+                return fail("Unrecognized --format: " + args.format,
+                            print_help=True)
 
             utils.flush_output(output)
         finally:
@@ -116,4 +117,3 @@ def main(argv):
         return fail("Unrecognized mode: " + args.mode, print_help=True)
 
     return 0
-

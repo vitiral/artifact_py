@@ -6,9 +6,7 @@ settings:
 artifacts:
     - done: null
       completion: {spc: 0.0, tst: 0.0}
-      impl:
-          primary: []
-          secondary: {}
+      impl: null
       file: simple.md
       name: SPC-simple
       partof: []
@@ -17,40 +15,14 @@ artifacts:
       subparts:
         - bar
         - foo
-      text:
-        - "# Simple Artifact (SPC-simple) {#SPC-simple}"
-        - "```yaml @"
-        - "partof: []"
-        - "done: null"
-        - "subparts:"
-        - "- foo"
-        - "- bar"
-        - "```"
-        - ""
-        - "This is a simple, but complete, design document with two artifacts."
-        - ""
-        - "You can link to other artifacts with [SPC-other], or to subparts with"
-        - "[SPC-simple.foo]. The link table will be automatically generated when this"
-        - "artifact is exported."
-        - ""
       extra: {}
     - done: null
       completion: {spc: 0.0, tst: 0.0}
-      impl:
-          primary: []
-          secondary: {}
+      impl: null
       file: simple.md
       name: SPC-other
       partof:
           - SPC-simple
       parts: []
       subparts: []
-      text:
-        - "# Other Artifact (SPC-other) {#SPC-other}"
-        - "```yaml @"
-        - "partof:"
-        - "  - SPC-simple"
-        - "```"
-        - "This is another artifact for demonstration purposes."
-        - ""
       extra: {}

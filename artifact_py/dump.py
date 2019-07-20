@@ -15,50 +15,57 @@ def dump_project(project, with_links=True):
     project = copy.deepcopy(project)
 
     # scrub all sections of things like reference links
-    scrub_sections_recurse(project.sections)
+    scrub_sections_recurse(project.root_section)
 
-    # remove trailing whitespace
-    last_section = get_last_section(project)
-    last_contents = None
-    if last_section:
-        last_contents = last_section.contents
-        strip_endlines(last_contents)
-
-    if last_contents is not None:
-        last_contents.append(_empty_txt())
+    lines = project.root_section.to_lines()
+    strip_empty_lines(lines)
 
     if with_links:
         # add our own references at the end
-        update_reference_links(project)
+        links = get_reference_links(project)
+        if lines or links:
+            lines.append('')
+        lines.extend(links)
 
-    return project.to_lines()
+    return lines
 
 
-def update_reference_links(project):
+def strip_empty_lines(lines):
+    for i in reversed(range(len(lines))):
+        if not lines[i].strip():
+            lines.pop(i)
+        else:
+            break
+
+
+def get_reference_links(project):
     if project.settings.code_url is None:
         return
 
     reference_links = []
 
-    for artifact in project.artifacts:
-        impl = artifact.impl
+    for name, impl in six.iteritems(project.impls):
         if impl.primary:
             reference_links.append(
-                reference_link(project.settings, artifact.name,
-                               impl.primary[0]))
+                reference_link(project.settings, name, impl.primary[0]))
 
         subparts = sorted(six.iteritems(impl.secondary), key=lambda x: x[0])
         for subpart, codelocs in subparts:
             reference_links.append(
                 reference_link(project.settings,
-                               artifact.name,
+                               name,
                                codelocs[0],
                                subpart=subpart))
 
-    if reference_links:
-        reference_links.append(anchor_txt.Text([""]))
+    lines = []
 
-    get_last_section(project).contents.extend(reference_links)
+    for reflink in reference_links:
+        lines.extend(reflink.to_lines())
+
+    if lines:
+        lines.append('')
+
+    return lines
 
 
 def reference_link(settings, name, codeloc, subpart=None):
@@ -94,48 +101,15 @@ def _last_section_recurse(section):
     return section
 
 
-def scrub_sections_recurse(sections):
-    for section in sections:
-        if isinstance(section, artifact.Artifact):
-            section = section.section
-        section.contents = [
-            c for c in section.contents if not _is_artifact_reference(c)
-        ]
-        scrub_sections_recurse(section.sections)
+def scrub_sections_recurse(section):
+    section.contents = [
+        c for c in section.contents if not _is_artifact_reference(c)
+    ]
 
-
-def _empty_txt():
-    return anchor_txt.Text([""])
+    for child in section.sections:
+        scrub_sections_recurse(child)
 
 
 def _is_artifact_reference(content):
     return (isinstance(content, anchor_txt.ReferenceLink)
             and code.NAME_FULL_RE.match(content.reference))
-
-
-
-def strip_endlines(contents):
-    if not contents:
-        return
-
-    # gather the raw from all text objects
-    texts = []
-    for i in reversed(range(len(contents))):
-        if isinstance(contents[i], anchor_txt.Text):
-            texts.append(contents.pop(i))
-        else:
-            break
-
-    texts.reverse()
-    raw = []
-    for t in texts:
-        raw.extend(t.raw)
-
-    for i in reversed(range(len(raw))):
-        if raw[i] == "":
-            raw.pop(i)
-        else:
-            break
-
-    if raw:
-        contents.append(anchor_txt.Text(raw))

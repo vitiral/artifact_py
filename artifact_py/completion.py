@@ -59,7 +59,7 @@ def impl_to_statistics(impl, subparts):
         if subparts:
             # If subparts are defined not being implemented
             # in code means that you get counts against you
-            (1 + len(subparts), 0.0, 0, 0.0)
+            return (1 + len(subparts), 0.0, 0, 0.0)
         else:
             return (0, 0.0, 0, 0.0)
     if isinstance(impl, ImplDone):

@@ -37,7 +37,7 @@ class TestArtifactsOnly:
         assert expected == result, test_name
         assert self.DIR == root_dir
 
-    def test_settings(self):
+    def test_simple(self):
         self.run_test('simple')
 
     def test_settings_bottom(self):
