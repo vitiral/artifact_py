@@ -4,6 +4,7 @@ settings:
     extra: {}
 artifacts:
     - done: null
+      completion: {spc: 0.0, tst: 0.0}
       impl:
           primary: []
           secondary: {}
@@ -32,6 +33,7 @@ artifacts:
         - "artifact is exported."
         - ""
     - done: null
+      completion: {spc: 0.0, tst: 0.0}
       impl:
           primary: []
           secondary: {}

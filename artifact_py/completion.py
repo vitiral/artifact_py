@@ -21,13 +21,12 @@ For types and methods associated with the completion ratio of artifacts.
 import re
 from . import utils
 from . import name
+from . import code
 
-SUB_PART_VALID_RE = re.compile(
-    r"^(?:tst-)?[{}]+$".format(name.NAME_VALID_CHARS), re.IGNORECASE)
 
 class Completion(utils.KeyCmp):
     def __init__(self, spc, tst):
-        super(Completed, self).__init__(key=(spc, tst))
+        super(Completion, self).__init__(key=(spc, tst))
         self.spc = spc
         self.tst = tst
 
@@ -38,29 +37,6 @@ class Completion(utils.KeyCmp):
         }
 
 
-class SubPart(utils.KeyCmp):
-    def __init__(self, key, raw):
-        super(SubPart, self).__init__(key=key)
-        self.raw = raw
-
-    def is_tst(self):
-        return self.key.startswith("TST")
-
-    @classmethod
-    def from_str(cls, raw):
-        match = SUB_PART_VALID_RE.match(raw)
-        if not match:
-            raise ValueError("Invalid subparts: {}".format(raw))
-
-        return cls(key=raw.upper(), raw=raw)
-
-    def __repr__(self):
-        return self.raw
-
-    def serialize(self, _settings):
-        return self.raw
-
-
 class ImplDone:
     def __init__(self, raw):
         self.raw = raw
@@ -69,39 +45,38 @@ class ImplDone:
         return self.raw
 
 
-
-def impl_to_statistics(impl, subnames):
+def impl_to_statistics(impl, subparts):
     """"
-    Return the `(count, value, secondary_count, secondary_value)`
-    that this impl should contribute to the "implemented" statistics.
+    Return the `(count, value, secondary_count, secondary_value)` that this
+    impl should contribute to the "specified" and "tested" statistics.
 
     "secondary" is used because the Done field actually does contribute to
     both spc AND tst for REQ and SPC types.
 
-    `subnames` should contain the subnames the artifact defines.
+    `subparts` should contain the subparts the artifact defines.
     """
     if impl is None:
-        if subnames:
-            # If subnames are defined not being implemented
+        if subparts:
+            # If subparts are defined not being implemented
             # in code means that you get counts against you
-            (1 + len(subnames), 0.0, 0, 0.0)
+            (1 + len(subparts), 0.0, 0, 0.0)
         else:
             return (0, 0.0, 0, 0.0)
     if isinstance(impl, ImplDone):
         return (1, 1.0, 1, 1.0)
-    if isinstance(impl, ImplCode):
-        return _implcode_to_statistics(impl, subnames)
+    if isinstance(impl, code.ImplCode):
+        return _implcode_to_statistics(impl, subparts)
     else:
         raise TypeError(impl)
 
 
-def _implcode_to_statistics(impl, subnames):
+def _implcode_to_statistics(impl, subparts):
     count = 1
     value = int(bool(impl.primary))
 
     sec_count = 0
     sec_value = 0.0
-    for sub in subnames:
+    for sub in subparts:
         count += 1
 
         # track if the subname is implemented

@@ -19,6 +19,7 @@ import six
 
 from . import utils
 from .name import Name
+from .name import SubPart
 from . import completion
 
 
@@ -88,7 +89,7 @@ class ArtifactBuilder:
     def from_attributes_consume(cls, attributes, name, file_, impl, section):
         partof = {Name.from_str(n) for n in attributes.pop('partof', [])}
         subparts = {
-            completion.SubPart.from_str(s)
+            SubPart.from_str(s)
             for s in attributes.pop('subparts', [])
         }
         return cls(
@@ -121,6 +122,7 @@ class ArtifactBuilder:
             section=self.section,
             done=self.done,
             parts=self.parts,
+            completion=self.completion,
         )
 
     def __repr__(self):

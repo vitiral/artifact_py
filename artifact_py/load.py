@@ -39,7 +39,7 @@ def from_root_file(root_file):
     project_sections = load_project_sections(
         sections=root_section.sections,
         file_=root_file,
-        impls=impls,
+        code_impls=code_impls,
     )
 
     artifacts_builder = load_artifacts_builder(project_sections)
@@ -53,7 +53,7 @@ def from_root_file(root_file):
     )
 
 
-def load_project_sections(sections, file_, impls):
+def load_project_sections(sections, file_, code_impls):
     """Load artifacts from the sections.
     """
 
@@ -69,7 +69,7 @@ def load_project_sections(sections, file_, impls):
             project_sections.append(section)
             continue
 
-        impl = impls.get(art_name)
+        impl = code_impls.get(art_name)
         if not impl:
             impl = code.ImplCode.new()
 
@@ -114,7 +114,7 @@ def ratio(value, count):
         return value / count
 
 
-def update_completeion(artifacts_builder, code_impls):
+def update_completion(artifacts_builder, code_impls):
     builder_map = artifacts_builder.builder_map
     graph = artifacts_builder.graph
 
@@ -126,17 +126,17 @@ def update_completeion(artifacts_builder, code_impls):
 
     for name in reversed(sorted_graph):
         builder = builder_map.get(name)
-        (count_spc, value_spc, count_tst,
-         value_tst) = builder.impl.to_statistics(code_impls)
+        stats = completion.impl_to_statistics(builder.impl, builder.subparts)
+        (count_spc, value_spc, count_tst, value_tst) = stats
 
         if name.is_tst():
-            for name in graph.neighbors():
+            for name in graph.neighbors(name):
                 value_spc += specified[name]
                 count_spc += 1
             value_tst = value_spc
             count_tst = count_spc
         else:
-            for neighbor in graph.neighbors():
+            for neighbor in graph.neighbors(name):
                 value_tst += tested[neighbor]
                 count_tst += 1
 
