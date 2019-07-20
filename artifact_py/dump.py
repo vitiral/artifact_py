@@ -44,6 +44,7 @@ def update_reference_links(project):
                                codelocs[0],
                                subpart=subpart))
 
+    import pdb; pdb.set_trace()
     last_section(project).contents.extend(reference_links)
 
 
