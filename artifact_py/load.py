@@ -64,11 +64,12 @@ def from_root_file(root_file):
         contents=root_section.contents,
     )
 
+
 def find_settings(section, root_file):
     """Walk through all sections looking for the artifact settings."""
     if SETTINGS_KEY in section.attributes:
-        return settings.Settings.from_dict(
-            section.attributes[SETTINGS_KEY], root_file)
+        return settings.Settings.from_dict(section.attributes[SETTINGS_KEY],
+                                           root_file)
 
     for section in section.sections:
         p_settings = find_settings(section, root_file)

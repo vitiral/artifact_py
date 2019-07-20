@@ -96,3 +96,24 @@ def write_lines(lines, output_file):
         fd.flush()
         fd.close()
         os.fsync(fd)
+
+
+def ensure_str(name, value, allow_none=False):
+    if allow_none and value is None:
+        return value
+
+    if not isinstance(value, six.text_type):
+        raise TypeError("{} must be str: {}".format(name, value))
+    return value
+
+
+def ensure_list(name, value, itemtype=None):
+    if not isinstance(value, list):
+        raise TypeError("{} must be a list: {}".format(name, value))
+    if itemtype:
+        for item in value:
+            if not isinstance(item, itemtype):
+                raise TypeError("{} contain only {}: {}".format(
+                    name, itemtype, item))
+
+    return value

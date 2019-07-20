@@ -38,17 +38,32 @@ class Settings:
 
     @classmethod
     def from_dict_consume(cls, dct, root_file):
-        root_dir = utils.joinabs(os.path.dirname(root_file),
-                                 dct.pop('root_dir', ''))
-        code_paths = utils.joinabs_all(root_dir, dct.pop('code_paths', []))
-        exclude_code_paths = utils.joinabs_all(
-            root_dir, dct.pop('exclude_code_paths', []))
+        root_dir = utils.ensure_str('root_dir', dct.pop('root_dir', ''))
+        root_dir = utils.joinabs(os.path.dirname(root_file), root_dir)
+
+        code_paths = utils.ensure_list(
+            'code_paths',
+            dct.pop('code_paths', []),
+            itemtype=six.text_type,
+        )
+        code_paths = utils.joinabs_all(root_dir, code_paths)
+
+        exclude_code_paths = utils.ensure_list(
+            'exclude_code_paths',
+            dct.pop('exclude_code_paths', []),
+            itemtype=six.text_type,
+        )
+        exclude_code_paths = utils.joinabs_all(root_dir, exclude_code_paths)
+
+        code_url = utils.ensure_str('code_url',
+                                    dct.pop('code_url', None),
+                                    allow_none=True)
 
         return cls(root_file=root_file,
                    root_dir=root_dir,
                    code_paths=code_paths,
                    exclude_code_paths=set(exclude_code_paths),
-                   code_url=dct.pop('code_url', None),
+                   code_url=code_url,
                    extra=dct)
 
     def relpath(self, path):

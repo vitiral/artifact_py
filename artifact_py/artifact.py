@@ -93,11 +93,16 @@ class ArtifactBuilder:
 
     @classmethod
     def from_attributes_consume(cls, attributes, name, file_, impl, section):
-        partof = {Name.from_str(n) for n in attributes.pop('partof', [])}
-        subparts = {
-            SubPart.from_str(s)
-            for s in attributes.pop('subparts', [])
-        }
+        name_raw = name.raw
+        partof = utils.ensure_list(name_raw + ' partof',
+                                   attributes.pop('partof', []))
+        partof = {Name.from_str(n) for n in partof}
+
+        subparts = utils.ensure_list(name_raw + ' subparts',
+                                     attributes.pop('subparts', []))
+        subparts = {SubPart.from_str(s) for s in subparts}
+        done = utils.ensure_str(name_raw + ' done', attributes.pop('done', None), allow_none=True)
+
         attributes.pop('artifact', None)  # Normal settings. Ignore.
         return cls(
             name=name,
@@ -106,7 +111,7 @@ class ArtifactBuilder:
             section=section,
             partof=partof,
             subparts=subparts,
-            done=attributes.pop('done', None),
+            done=done,
             extra=attributes,
         )
 
