@@ -29,8 +29,8 @@ from . import utils
 RE_NAME_KEY = "name"
 RE_SUBPART_KEY = "subpart"
 
-NAME_CODE_STR = r"#(?P<name>{})(:?\.(?P<subpart>{}))?".format(name.NAME_VALID_STR,
-                                        name.SUB_PART_VALID_STR)
+NAME_CODE_STR = r"#(?P<name>{})(:?\.(?P<subpart>{}))?".format(
+    name.NAME_VALID_STR, name.SUB_PART_VALID_STR)
 
 NAME_CODE_RE = re.compile(NAME_CODE_STR, re.I)
 NAME_CODE_VALID_RE = re.compile("${}^".format(NAME_CODE_STR), re.I)

@@ -71,6 +71,7 @@ class Settings:
         return {
             'root_dir': os.path.dirname(self.root_file),
             'code_paths': sorted(self.relpath_all(self.code_paths)),
-            'exclude_code_paths': sorted(self.relpath_all(self.exclude_code_paths)),
+            'exclude_code_paths':
+            sorted(self.relpath_all(self.exclude_code_paths)),
             'extra': self.extra,
         }

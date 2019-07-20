@@ -42,3 +42,9 @@ class TestGraph(unittest.TestCase):
         assert n2 in self.g
         assert self.g.has_edge(n1, n2)
         assert self.g.has_edge(n1_, n2_)
+
+    def test_neighbors(self):
+        n1 = Name.from_str("REQ-foo")
+        n2 = Name.from_str("REQ-bar")
+        self.g.add_edge(n1, n2)
+        assert [n2] == list(self.g.neighbors(n1))

@@ -129,4 +129,5 @@ class ArtifactBuilder:
 class ArtifactsBuilder:
     def __init__(self, builders, graph):
         self.builders = builders
+        self.builder_map = {b.name: b for b in builders}
         self.graph = graph

@@ -50,6 +50,15 @@ class Name(utils.KeyCmp):
 
         return cls(key=raw.upper(), ty=match.group(1).upper(), raw=raw)
 
+    def is_req(self):
+        return self.ty == REQ
+
+    def is_spc(self):
+        return self.ty == SPC
+
+    def is_tst(self):
+        return self.ty == TST
+
     def __repr__(self):
         return self.raw
 
