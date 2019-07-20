@@ -63,9 +63,14 @@ def main(argv):
 
     args = parser.parse_args(argv)
 
+    def fail(msg, print_help=False):
+        print(msg)
+        if print_help:
+            parser.print_help()
+        return 1
+
     if args.mode is None:
-        parser.print_help()
-        sys.exit(1)
+        return fail("must specify a mode", print_help=True)
 
     project = load.from_root_file(args.doc)
     artifacts = project.artifacts
@@ -74,6 +79,8 @@ def main(argv):
         output = None
         try:
             if args.inplace:
+                if args.format != 'md':
+                    return fail("if --inplace requires --format=md")
                 output = open(args.doc, 'w')
             elif args.output:
                 output = open(args.output, 'w')
@@ -87,9 +94,7 @@ def main(argv):
             elif args.format == 'md':
                 utils.write_lines(dump.dump_project(project), output)
             else:
-                print("Unrecognized --format:", args.format)
-                parser.print_help()
-                sys.exit(1)
+                return fail("Unrecognized --format: " + args.format, print_help=True)
 
             utils.flush_output(output)
         finally:
@@ -105,13 +110,10 @@ def main(argv):
             for a in sorted(artifacts, key=lambda a: a.name):
                 print('{}\t{}'.format(a.name.key, a.completion.tst))
         else:
-            print("Unrecognized type:", args.type)
-            parser.print_help()
-            sys.exit(1)
+            return fail("Unrecognized type: " + args.type, print_help=True)
 
     else:
-        print("Unrecognized mode:", args.mode)
-        parser.print_help()
-        sys.exit(1)
+        return fail("Unrecognized mode: " + args.mode, print_help=True)
 
     return 0
+

@@ -16,6 +16,7 @@
 # be dual licensed as above, without any additional terms or conditions.
 from __future__ import unicode_literals, division
 import os
+import sys
 
 from collections import OrderedDict
 import six
@@ -95,7 +96,8 @@ def write_lines(lines, output):
 
 def flush_output(output):
     output.flush()
-    os.fsync(output)
+    if output not in (sys.stdout, sys.stderr):
+        os.fsync(output)
 
 
 def ensure_str(name, value, allow_none=False):

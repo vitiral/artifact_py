@@ -71,10 +71,7 @@ class Artifact:
 
 
 class ArtifactBuilder:
-    """Builder object for the artifact.
-
-    See #SPC-design.aritfact_builder
-    """
+    """Builder object for the artifact."""
     def __init__(self, name, file_, impl, section, partof, subparts, done,
                  extra):
         self.name = name

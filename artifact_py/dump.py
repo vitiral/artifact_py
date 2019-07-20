@@ -18,10 +18,11 @@ def dump_project(project, with_links=True):
     scrub_sections_recurse(project.sections)
 
     # remove trailing whitespace
-    last_contents = last_section(project).contents
-    while (last_contents and isinstance(last_contents[-1], anchor_txt.Text)
-           and last_contents[-1].raw == ['']):
-        last_contents.pop()
+    last_section = get_last_section(project)
+    last_contents = None
+    if last_section:
+        last_contents = last_section.contents
+        strip_endlines(last_contents)
 
     if last_contents is not None:
         last_contents.append(_empty_txt())
@@ -46,7 +47,8 @@ def update_reference_links(project):
                 reference_link(project.settings, artifact.name,
                                impl.primary[0]))
 
-        for subpart, codelocs in six.iteritems(impl.secondary):
+        subparts = sorted(six.iteritems(impl.secondary), key=lambda x: x[0])
+        for subpart, codelocs in subparts:
             reference_links.append(
                 reference_link(project.settings,
                                artifact.name,
@@ -56,7 +58,7 @@ def update_reference_links(project):
     if reference_links:
         reference_links.append(anchor_txt.Text([""]))
 
-    last_section(project).contents.extend(reference_links)
+    get_last_section(project).contents.extend(reference_links)
 
 
 def reference_link(settings, name, codeloc, subpart=None):
@@ -75,11 +77,12 @@ def reference_link(settings, name, codeloc, subpart=None):
     )
 
 
-def last_section(project):
+def get_last_section(project):
     last = None
     if project.sections:
         last = project.sections[-1]
-    assert last, "some section has to exist"
+    if last is None:
+        return None
     return _last_section_recurse(last)
 
 
@@ -108,3 +111,31 @@ def _empty_txt():
 def _is_artifact_reference(content):
     return (isinstance(content, anchor_txt.ReferenceLink)
             and code.NAME_FULL_RE.match(content.reference))
+
+
+
+def strip_endlines(contents):
+    if not contents:
+        return
+
+    # gather the raw from all text objects
+    texts = []
+    for i in reversed(range(len(contents))):
+        if isinstance(contents[i], anchor_txt.Text):
+            texts.append(contents.pop(i))
+        else:
+            break
+
+    texts.reverse()
+    raw = []
+    for t in texts:
+        raw.extend(t.raw)
+
+    for i in reversed(range(len(raw))):
+        if raw[i] == "":
+            raw.pop(i)
+        else:
+            break
+
+    if raw:
+        contents.append(anchor_txt.Text(raw))
