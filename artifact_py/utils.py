@@ -85,3 +85,14 @@ def ordered_recurse(value):
         return OrderedDict(items)
 
     return value
+
+
+def write_lines(lines, output_file):
+    with open(output_file, 'w') as fd:
+        for line in lines:
+            fd.write(line)
+            fd.write('\n')
+
+        fd.flush()
+        fd.close()
+        os.fsync(fd)

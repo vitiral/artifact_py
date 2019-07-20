@@ -62,6 +62,7 @@ class Artifact:
     def to_lines(self):
         return self.section.to_lines()
 
+
 class ArtifactBuilder:
     """Intermediate artifact."""
     def __init__(self, name, file_, impl, section, partof, subparts, done,

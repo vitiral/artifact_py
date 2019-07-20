@@ -45,11 +45,20 @@ def from_root_file(root_file):
     artifacts_builder = load_artifacts_builder(project_sections)
     update_completion(artifacts_builder, code_impls)
 
+    artifacts = [b.build() for b in artifacts_builder.builders]
+    artifact_map = {a.name: a for a in artifacts}
+
+    project_sections = [
+        artifact_map[section.name]
+        if isinstance(section, artifact.ArtifactBuilder) else section
+        for section in project_sections
+    ]
+
     return project.Project(
         settings=p_settings,
-        artifacts=[b.build() for b in artifacts_builder.builders],
-        contents=root_section.contents,
+        artifacts=artifacts,
         sections=project_sections,
+        contents=root_section.contents,
     )
 
 

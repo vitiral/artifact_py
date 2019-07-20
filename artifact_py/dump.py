@@ -1,35 +1,27 @@
 import os
-import deepcopy
+import copy
 import re
 
 import anchor_txt
 import six
 
 from . import code
+from . import artifact
 
 
-def dump_project(project, output_file, with_links=True):
+def dump_project(project, with_links=True):
     """Dump the artifact project with fresh reference links."""
     # make a copy so we can mutate things
     project = copy.deepcopy(project)
 
     # scrub all sections of things like reference links
     scrub_sections_recurse(project.sections)
-    for artifact in project.artifacts:
-        scrub_sections_recurse([artifact.section])
 
     if with_links:
         # add our own references at the end
         update_reference_links(project)
 
-    with open(output_file, 'w') as fd:
-        for line in project.to_lines():
-            fd.write(line)
-            fd.write('\n')
-
-        fd.flush()
-        fd.close()
-        os.fsync(fd)
+    return project.to_lines()
 
 
 def update_reference_links(project):
@@ -41,12 +33,16 @@ def update_reference_links(project):
     for artifact in project.artifacts:
         impl = artifact.impl
         if impl.primary:
-            reference_links.append(format_reference_link(
-                settings, artifact.name, impl.primary[0]))
+            reference_links.append(
+                format_reference_link(settings, artifact.name,
+                                      impl.primary[0]))
 
         for subpart, codelocs in six.iteritems(impl.secondary):
-            reference_links.append(reference_link(
-                settings, artifact.name, codelocs[0], subpart=subpart))
+            reference_links.append(
+                reference_link(settings,
+                               artifact.name,
+                               codelocs[0],
+                               subpart=subpart))
 
     last_section(project).contents.extend(reference_links)
 
@@ -68,24 +64,27 @@ def last_section(project):
     last = None
     if project.sections:
         last = project.sections[-1]
-    if project.artifacts:
-        last = project.artifacts[-1].section
     assert last, "some section has to exist"
     return _last_section_recurse(last)
 
 
 def _last_section_recurse(section):
+    if isinstance(section, artifact.Artifact):
+        section = section.section
     if section.sections:
         return _last_section_recurse(section.sections[-1])
     return section
 
+
 def scrub_sections_recurse(sections):
     for section in sections:
+        if isinstance(section, artifact.Artifact):
+            section = section.section
         section.contents = [
-            c for c in section.contents
-            if not _is_artifact_reference(c)
+            c for c in section.contents if not _is_artifact_reference(c)
         ]
         scrub_sections_recurse(section.sections)
+
 
 def _is_artifact_reference(content):
     return (isinstance(content, anchor_txt.ReferenceLink)

@@ -4,6 +4,7 @@ import unittest
 
 import anchor_txt
 
+from artifact_py import dump
 from artifact_py import load
 from artifact_py import utils
 
@@ -54,7 +55,11 @@ class TestProjects:
         result = project.serialize()
         root_dir = result['settings'].pop('root_dir')
         assert expected == result, test_name
-        assert test_dir == root_dir
+        assert test_dir == root_dir, "root_dir of " + test_name
+
+        expected = read(os.path.join(test_dir, 'dump.md'))
+        result = '\n'.join(dump.dump_project(project))
+        assert expected == result, "dump of " + test_name
 
     def test_simple(self):
         self.run_test('simple')
