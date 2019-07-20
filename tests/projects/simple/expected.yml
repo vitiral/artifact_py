@@ -1,0 +1,71 @@
+settings:
+    code_paths:
+        - script.py
+        - src
+    exclude_code_paths:
+        - src/exclude
+        - src/ignore.py
+    extra: {}
+artifacts:
+    - done: null
+      file: README.md
+      name: SPC-simple
+      impl:
+          primary:
+                - file: src/simple.py
+                  line: 3
+          secondary:
+              deep:
+                - file: src/deep/deep.py
+                  line: 0
+              script:
+                - file: script.py
+                  line: 0
+              simple:
+                - file: src/simple.py
+                  line: 1
+              tst-simple:
+                - file: src/simple.py
+                  line: 1
+      partof: []
+      parts:
+          - SPC-notimpl
+      subparts:
+          - deep
+          - script
+          - simple
+          - tst-exclude
+          - tst-ignore
+          - tst-simple
+      text:
+        - "# Simple Test Doc (SPC-simple) {#SPC-simple}"
+        - "```yaml @"
+        - "subparts:"
+        - "  - simple"
+        - "  - script"
+        - "  - deep"
+        - "  - tst-simple"
+        - "  - tst-exclude"
+        - "  - tst-ignore"
+        - "```"
+        - "Simple with some code links"
+        - ""
+        - ""
+    - done: null
+      file: README.md
+      name: SPC-notimpl
+      impl:
+          primary: []
+          secondary: {}
+      partof:
+          - SPC-simple
+      parts: []
+      subparts: []
+      text:
+
+        - "# Not implemented (SPC-notimpl) {#SPC-notimpl}"
+        - "```yaml @"
+        - "partof:"
+        - "  - SPC-simple"
+        - "```"
+        - ""

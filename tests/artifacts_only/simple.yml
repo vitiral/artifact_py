@@ -4,6 +4,9 @@ settings:
     extra: {}
 artifacts:
     - done: null
+      impl:
+          primary: []
+          secondary: {}
       file: simple.md
       name: SPC-simple
       partof: []
@@ -29,6 +32,9 @@ artifacts:
         - "artifact is exported."
         - ""
     - done: null
+      impl:
+          primary: []
+          secondary: {}
       file: simple.md
       name: SPC-other
       partof:

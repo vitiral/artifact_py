@@ -63,7 +63,6 @@ class ImplCode:
     primary: CodeLoc or None
     secondary: dict[SubPart, CodeLoc]
     """
-
     def __init__(self, primary, secondary):
         self.primary = primary
         self.secondary = secondary
@@ -74,9 +73,9 @@ class ImplCode:
             "secondary": {
                 n.serialize(settings): c.serialize(settings)
                 for n, c in six.itervalues(self.secondary)
-
             },
         }
+
 
 class CodeLoc:
     def __init__(self, settings, file_, line):
@@ -89,6 +88,7 @@ class CodeLoc:
             "file": settings.relpath(self.file),
             "line": self.line,
         }
+
 
 def impl_to_statistics(impl, subnames):
     """"

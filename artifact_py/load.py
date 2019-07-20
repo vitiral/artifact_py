@@ -25,26 +25,32 @@ from . import settings
 from . import project
 from . import artifact
 from . import name
+from . import code
 
 
 def from_root_file(root_file):
     root_section = anchor_txt.Section.from_md_path(root_file)
     p_settings = settings.Settings.from_dict(
         root_section.attributes.get('artifact', {}), root_file)
+
+    impls = code.find_impls(p_settings)
+
     project_sections = load_project_sections(
         sections=root_section.sections,
         file_=root_file,
+        impls=impls,
     )
+
     artifacts_builder = load_artifacts_builder(project_sections)
     return project.Project(
         settings=p_settings,
-        artifacts=[b.build(p_settings) for b in artifacts_builder.builders],
+        artifacts=[b.build() for b in artifacts_builder.builders],
         contents=root_section.contents,
         sections=project_sections,
     )
 
 
-def load_project_sections(sections, file_):
+def load_project_sections(sections, file_, impls):
     """Load artifacts from the sections.
     """
 
@@ -60,11 +66,17 @@ def load_project_sections(sections, file_):
             project_sections.append(section)
             continue
 
+        impl = impls.get(art_name)
+        if not impl:
+            impl = code.ImplCode.new()
+
         art_im = artifact.ArtifactBuilder.from_attributes(
             attributes=section.attributes,
-            section=section,
             name=art_name,
-            file_=file_)
+            file_=file_,
+            impl=impl,
+            section=section,
+        )
 
         project_sections.append(art_im)
 

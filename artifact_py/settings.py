@@ -45,7 +45,7 @@ class Settings:
         return cls(root_file=root_file,
                    root_dir=root_dir,
                    code_paths=code_paths,
-                   exclude_code_paths=exclude_code_paths,
+                   exclude_code_paths=set(exclude_code_paths),
                    extra=dct)
 
     def relpath(self, path):
@@ -70,7 +70,7 @@ class Settings:
     def serialize(self):
         return {
             'root_dir': os.path.dirname(self.root_file),
-            'code_paths': self.relpath_all(self.code_paths),
-            'exclude_code_paths': self.relpath_all(self.exclude_code_paths),
+            'code_paths': sorted(self.relpath_all(self.code_paths)),
+            'exclude_code_paths': sorted(self.relpath_all(self.exclude_code_paths)),
             'extra': self.extra,
         }

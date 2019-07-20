@@ -78,13 +78,10 @@ def ordered_recurse(value):
         return [ordered_recurse(v) for v in value]
     if isinstance(value, dict):
         items = sorted(
-            (
-                (key, ordered_recurse(value))
-                for key, value in six.iteritems(value)
-            ),
+            ((key, ordered_recurse(value))
+             for key, value in six.iteritems(value)),
             key=lambda i: i[0],
         )
         return OrderedDict(items)
 
     return value
-

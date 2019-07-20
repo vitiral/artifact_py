@@ -35,7 +35,7 @@ test3:
 	# Testing python3
 	py3/bin/py.test -vvv
 
-test: test2 test3
+test: test3 test2
 
 clean:
 	rm -rf py2 py3 dist anchor_txt.egg-info

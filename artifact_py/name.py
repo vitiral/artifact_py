@@ -24,10 +24,9 @@ NAME_VALID_STR = r"(?P<type>REQ|SPC|TST)-(?:[{0}]+-)*(?:[{0}]+)".format(
     NAME_VALID_CHARS)
 NAME_VALID_RE = re.compile(r"^{}$".format(NAME_VALID_STR), re.IGNORECASE)
 
-
 SUB_PART_VALID_STR = r"(?:tst-)?[{}]+".format(NAME_VALID_CHARS)
-SUB_PART_VALID_RE = re.compile(r"^{}$".format(SUB_PART_VALID_STR), re.IGNORECASE)
-
+SUB_PART_VALID_RE = re.compile(r"^{}$".format(SUB_PART_VALID_STR),
+                               re.IGNORECASE)
 
 REQ = "REQ"
 SPC = "SPC"

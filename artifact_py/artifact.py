@@ -23,18 +23,28 @@ from . import completion
 
 
 class Artifact:
-    def __init__(self, settings, name, file_, partof, section, subparts, done, parts):
+    def __init__(
+            self,
+            name,
+            file_,
+            partof,
+            section,
+            subparts,
+            impl,
+            done,
+            parts,
+    ):
         self.name = name
         self.file = file_
         self.partof = partof
         self.section = section
         self.subparts = subparts
+        self.impl = impl
         self.done = done
         self.parts = parts
 
         # TODO: calculated
         # self.completed = completed
-        # self.impl_ = impl
 
     def serialize(self, settings):
         return {
@@ -45,18 +55,20 @@ class Artifact:
             "subparts": sorted(settings.serialize_list(self.subparts)),
             "done": settings.serialize_maybe(self.done),
             "parts": sorted(settings.serialize_list(self.parts)),
+            "impl": self.impl.serialize(settings),
 
             # TODO: calculated
             # "completed": self.completed.serialize(settings),
-            # "impl": self._impl.serialize(settings),
         }
 
 
 class ArtifactBuilder:
     """Intermediate artifact."""
-    def __init__(self, name, file_, section, partof, subparts, done, extra):
+    def __init__(self, name, file_, impl, section, partof, subparts, done,
+                 extra):
         self.name = name
         self.file = file_
+        self.impl = impl
         self.section = section
         self.partof = partof
         self.subparts = subparts
@@ -65,18 +77,18 @@ class ArtifactBuilder:
 
         self.parts = None
         self.completed = None
-        self.impl = None
 
     @classmethod
-    def from_attributes(cls, attributes, name, file_, section):
+    def from_attributes(cls, attributes, name, file_, impl, section):
         """Construct from a dictionary, with some overloads available."""
         return cls.from_attributes_consume(attributes=dict(attributes),
                                            name=name,
                                            file_=file_,
+                                           impl=impl,
                                            section=section)
 
     @classmethod
-    def from_attributes_consume(cls, attributes, name, file_, section):
+    def from_attributes_consume(cls, attributes, name, file_, impl, section):
         partof = {Name.from_str(n) for n in attributes.pop('partof', [])}
         subparts = {
             completion.SubPart.from_str(s)
@@ -85,6 +97,7 @@ class ArtifactBuilder:
         return cls(
             name=name,
             file_=file_,
+            impl=impl,
             section=section,
             partof=partof,
             subparts=subparts,
@@ -95,15 +108,15 @@ class ArtifactBuilder:
     def set_parts(self, parts):
         self.parts = parts
 
-    def build(self, settings):
+    def build(self):
         assert self.parts is not None, "must set_parts"
 
         return Artifact(
-            settings=settings,
             name=self.name,
             file_=self.file,
             partof=self.partof,
             subparts=self.subparts,
+            impl=self.impl,
             section=self.section,
             done=self.done,
             parts=self.parts,
