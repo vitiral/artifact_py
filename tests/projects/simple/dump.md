@@ -26,4 +26,3 @@ Simple with some code links
 partof:
   - SPC-simple
 ```
-
