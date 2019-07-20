@@ -10,10 +10,10 @@ class TestCode(unittest.TestCase):
 
     def test_re_single(self):
         text = "#SPC-single"
-        result = [m.group(0) for m in code.NAME_CODE_RE.finditer(text)]
+        result = [m.group(0) for m in code.NAME_TAG_RE.finditer(text)]
         assert ["#SPC-single"] == result
 
     def test_re_outside(self):
         text = "stuff #SPC-single. other"
-        result = [m.group(0) for m in code.NAME_CODE_RE.finditer(text)]
+        result = [m.group(0) for m in code.NAME_TAG_RE.finditer(text)]
         assert ["#SPC-single"] == result

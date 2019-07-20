@@ -29,11 +29,13 @@ from . import utils
 RE_NAME_KEY = "name"
 RE_SUBPART_KEY = "subpart"
 
-NAME_CODE_STR = r"#(?P<name>{})(:?\.(?P<subpart>{}))?".format(
+NAME_FULL_STR = r"(?P<name>{})(:?\.(?P<subpart>{}))?".format(
     name.NAME_VALID_STR, name.SUB_PART_VALID_STR)
+NAME_FULL_RE = re.compile(NAME_FULL_STR, re.I)
 
-NAME_CODE_RE = re.compile(NAME_CODE_STR, re.I)
-NAME_CODE_VALID_RE = re.compile("${}^".format(NAME_CODE_STR), re.I)
+NAME_TAG_STR = "#" + NAME_FULL_STR
+NAME_TAG_RE = re.compile(NAME_TAG_STR, re.I)
+NAME_TAG_VALID_RE = re.compile("${}^".format(NAME_TAG_STR), re.I)
 
 
 class ImplCode:
@@ -129,7 +131,7 @@ def update_impls_file(impls, code_file):
 
 
 def update_impls_line(code_file, impls, linenum, line):
-    for match in NAME_CODE_RE.finditer(line):
+    for match in NAME_TAG_RE.finditer(line):
         codeloc = CodeLoc(code_file, line=linenum)
         groups = match.groupdict()
         name = Name.from_str(groups[RE_NAME_KEY])

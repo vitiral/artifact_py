@@ -107,4 +107,4 @@ def _empty_txt():
 
 def _is_artifact_reference(content):
     return (isinstance(content, anchor_txt.ReferenceLink)
-            and code.NAME_CODE_VALID_RE.match(content.reference))
+            and code.NAME_FULL_RE.match(content.reference))
