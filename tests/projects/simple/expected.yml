@@ -2,6 +2,8 @@ settings:
     code_paths:
         - script.py
         - src
+    code_url:
+      "https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/{file}#L{line}"
     exclude_code_paths:
         - src/exclude
         - src/ignore.py

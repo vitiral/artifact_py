@@ -2,6 +2,7 @@ settings:
     code_paths: ['src']
     exclude_code_paths: []
     extra: {}
+    code_url: null
 artifacts:
     - done: null
       completion: {spc: 0.0, tst: 0.0}

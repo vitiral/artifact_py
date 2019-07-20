@@ -6,6 +6,8 @@ artifact:
     exclude_code_paths:
       - src/exclude/
       - src/ignore.py
+    code_url:
+      "https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/{file}#L{line}"
 ```
 
 # Simple Test Doc (SPC-simple) {#SPC-simple}
@@ -26,3 +28,9 @@ Simple with some code links
 partof:
   - SPC-simple
 ```
+
+[SPC-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L3
+[SPC-simple.simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L1
+[SPC-simple.tst-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L1
+[SPC-simple.deep]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/deep/deep.py#L0
+[SPC-simple.script]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/script.py#L0

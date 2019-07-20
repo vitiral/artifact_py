@@ -17,6 +17,15 @@ def dump_project(project, with_links=True):
     # scrub all sections of things like reference links
     scrub_sections_recurse(project.sections)
 
+    # remove trailing whitespace
+    last_contents = last_section(project).contents
+    while (last_contents and isinstance(last_contents[-1], anchor_txt.Text)
+           and last_contents[-1].raw == ['']):
+        last_contents.pop()
+
+    if last_contents is not None:
+        last_contents.append(_empty_txt())
+
     if with_links:
         # add our own references at the end
         update_reference_links(project)
@@ -34,17 +43,19 @@ def update_reference_links(project):
         impl = artifact.impl
         if impl.primary:
             reference_links.append(
-                format_reference_link(settings, artifact.name,
-                                      impl.primary[0]))
+                reference_link(project.settings, artifact.name,
+                               impl.primary[0]))
 
         for subpart, codelocs in six.iteritems(impl.secondary):
             reference_links.append(
-                reference_link(settings,
+                reference_link(project.settings,
                                artifact.name,
                                codelocs[0],
                                subpart=subpart))
 
-    import pdb; pdb.set_trace()
+    if reference_links:
+        reference_links.append(anchor_txt.Text([""]))
+
     last_section(project).contents.extend(reference_links)
 
 
@@ -54,7 +65,10 @@ def reference_link(settings, name, codeloc, subpart=None):
     else:
         reference = '{}.{}'.format(name.raw, subpart.raw)
 
-    link = settings.code_loc.format(file=codeloc.file, line=codeloc.line)
+    link = settings.code_url.format(
+        file=settings.relpath(codeloc.file),
+        line=codeloc.line,
+    )
     return anchor_txt.ReferenceLink.from_parts(
         reference=reference,
         link=link,
@@ -85,6 +99,10 @@ def scrub_sections_recurse(sections):
             c for c in section.contents if not _is_artifact_reference(c)
         ]
         scrub_sections_recurse(section.sections)
+
+
+def _empty_txt():
+    return anchor_txt.Text([""])
 
 
 def _is_artifact_reference(content):

@@ -76,5 +76,6 @@ class Settings:
             'code_paths': sorted(self.relpath_all(self.code_paths)),
             'exclude_code_paths':
             sorted(self.relpath_all(self.exclude_code_paths)),
+            'code_url': self.code_url,
             'extra': self.extra,
         }
