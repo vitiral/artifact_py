@@ -59,6 +59,8 @@ class Artifact:
             "completion": self.completion.serialize(settings),
         }
 
+    def to_lines(self):
+        return self.section.to_lines()
 
 class ArtifactBuilder:
     """Intermediate artifact."""

@@ -21,13 +21,16 @@ import six
 from . import utils
 
 
+# code_url = "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
 class Settings:
     def __init__(self, root_file, root_dir, code_paths, exclude_code_paths,
+                 code_url,
                  extra):
         self.root_file = root_file
         self.root_dir = root_dir
         self.code_paths = code_paths
         self.exclude_code_paths = exclude_code_paths
+        self.code_url = code_url
         self.extra = extra
 
     @classmethod
@@ -46,6 +49,7 @@ class Settings:
                    root_dir=root_dir,
                    code_paths=code_paths,
                    exclude_code_paths=set(exclude_code_paths),
+                   code_url=dct.pop('code_url', None),
                    extra=dct)
 
     def relpath(self, path):

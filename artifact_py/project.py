@@ -33,3 +33,11 @@ class Project:
             "settings": self.settings.serialize(),
             "artifacts": self.settings.serialize_list(self.artifacts),
         }
+
+    def to_lines(self):
+        lines = []
+        for section in self.sections:
+            lines.extend(section.to_lines())
+        for artifact in self.artifacts:
+            lines.extend(artifact.to_lines())
+        return lines

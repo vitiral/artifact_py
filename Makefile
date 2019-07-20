@@ -25,7 +25,7 @@ fix:
 	py3/bin/yapf --in-place -r artifact_py tests
 
 lint:
-	py3/bin/pylint anchor_txt
+	py3/bin/pylint artifact_py
 
 test2:
 	# Testing python2
