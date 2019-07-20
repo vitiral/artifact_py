@@ -24,6 +24,10 @@ from . import completion
 
 
 class Artifact:
+    """Represents a design object which can be linked to other design objects.
+
+    See #SPC-design.artifact
+    """
     def __init__(
             self,
             name,
@@ -67,7 +71,10 @@ class Artifact:
 
 
 class ArtifactBuilder:
-    """Intermediate artifact."""
+    """Builder object for the artifact.
+
+    See #SPC-design.aritfact_builder
+    """
     def __init__(self, name, file_, impl, section, partof, subparts, done,
                  extra):
         self.name = name

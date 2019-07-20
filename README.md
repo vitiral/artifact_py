@@ -16,6 +16,63 @@ the development of artifact 3.0. The primary differences will be:
 [anchor_txt]: https://github.com/vitiral/anchor_txt
 
 
+# Design (SPC-design) {#SPC-design}
+```yaml @
+artifact:
+  root_dir: './'
+
+  code_paths:
+    - artifact_py/
+    - tests/
+
+  exclude_code_paths:
+    - tests/artifacts_only/
+    - tests/projects/
+
+subparts:
+  - artifact
+  - settings
+  - code
+```
+
+## Settings (#SPC-design.settings}
+Artifacts are injected from the `--doc` markdown design document. All
+settings/attributes are provided using the [anchor_txt] format. Settings
+are provided by adding the following to an `artifact` attribute anywhere
+in the document:
+
+- `root_dir`: the root directory when creating paths. This will affect
+  where other path settings use as a reference.
+- `code_paths`: paths to files or directories to look for code.
+  See [Code Links](#SPC-design.code) for more information.
+- `exclude_code_paths`: paths to exclude when searching for artifacts.
+
+
+## Artifact {#SPC-design.artifact}
+An artifact is a piece of documentation that can be linked to other pieces of
+documentation and to source code. It has the following attributes:
+
+- `name`: defines how it can be linked. The name is defined in the
+  anchor header (`{#REQ-foo}`)
+  - There are three types of artifacts: REQ (requirement), SPC (specification),
+    TST (test)
+- `partof`: the other artifacts this artifact is a partof.
+- `subparts`: pieces of an artifact that can be linked in code.
+- `done`: force an artifact to be considered specified and tested
+
+
+## Code Links {#SPC-design.code}
+Artifacts are linked in code by:
+- Defining an artifact name or subpart
+- Specifying `code_paths` in [Settings](#SPC-design.settings)
+- Putting a tag anywhere in code of the form:
+  - `#SPC-foo`
+  - `#SPC-foo.bar`
+
+Artifact will run a regular expression over all files found in `code_paths` and
+will mark artifacts as specified/tested if they are linked in code.
+
+
 # License
 
 The source code is Licensed under either of
