@@ -21,7 +21,7 @@ be:
   - Artifacts are now specified by the anchor in a header. Conventionally it
     will look like `# This is my spec (SPC-mine) {#SPC-mine}`. The
     `{#SPC-mine}` is a standard markdown anchor used to create a reference. The
-    `(SPC-min)` is by-convention so that humans can see that the header is
+    `(SPC-mine)` is by-convention so that humans can see that the header is
     specifying an artifact.
   - Artifact attributes are specified with a fenced code block. See [SPC-design]
     for an example.
@@ -52,22 +52,6 @@ Features still to be added:
 
 # Design (SPC-design) {#SPC-design}
 ```yaml @
-artifact:
-  root_dir: './'
-
-  code_paths:
-    - artifact_py/
-    - tests/
-
-  exclude_code_paths:
-    - tests/artifacts_only/
-    - tests/projects/
-    - tests/test_code.py
-
-
-  code_url:
-    "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
-
 subparts:
   - artifact
   - settings
@@ -76,14 +60,20 @@ subparts:
   - tst-unittests
 ```
 
-All attributes and settings are specified with an [anchor_txt] code block, which looks like this:
+All attributes and settings are specified with an [anchor_txt] code block.
+
+Settings are specified like this, anywhere in the document:
 
     ```yaml @
     artifact:
       root_dir: ./
       code_paths:
         - src/
+    ```
 
+Artifact attributes like this:
+
+    ```yaml @
     partof:
       - SPC-other
 
@@ -92,7 +82,7 @@ All attributes and settings are specified with an [anchor_txt] code block, which
       - tst-unit
     ```
 
-## Settings (SPC-design.settings) {#SPC-design.settings}
+## Settings (SPC-design.settings) <a id="SPC-design.settings"></a>
 > _code: [SPC-design.settings]_
 
 Artifacts are injected from the `--doc` markdown design document. All
@@ -107,7 +97,7 @@ in the document:
 - `exclude_code_paths`: paths to exclude when searching for artifacts.
 
 
-## Artifact (SPC-design.artifact) {#SPC-design.artifact}
+## Artifact (SPC-design.artifact) <a id="SPC-design.artifact" />
 > _code: [SPC-design.artifact]_
 
 An artifact is a piece of documentation that can be linked to other pieces of
@@ -206,3 +196,22 @@ be dual licensed as above, without any additional terms or conditions.
 [SPC-design.code]: https://github.com/vitiral/artifact/blob/master/artifact_py/code.py#L17
 [SPC-design.settings]: https://github.com/vitiral/artifact/blob/master/artifact_py/settings.py#L29
 
+# Metadata
+
+```yaml @
+artifact:
+  root_dir: './'
+
+  code_paths:
+    - artifact_py/
+    - tests/
+
+  exclude_code_paths:
+    - tests/artifacts_only/
+    - tests/projects/
+    - tests/test_code.py
+
+
+  code_url:
+    "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
+```
