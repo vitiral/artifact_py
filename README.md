@@ -23,6 +23,8 @@ be:
     `{#SPC-mine}` is a standard markdown anchor used to create a reference. The
     `(SPC-mine)` is by-convention so that humans can see that the header is
     specifying an artifact.
+    - Note: `anchor_txt` also supported the html anchor `<a id="SPC-mine" />`,
+      which is what is necessary in github
   - Artifact attributes are specified with a fenced code block. See [SPC-design]
     for an example.
   - Removal of `[[REQ-foo]]` references. Instead you just use `[REQ-foo]` and
@@ -50,7 +52,7 @@ Features still to be added:
 - A stable json output format. It is still in flux.
 
 
-# Design (SPC-design) {#SPC-design}
+# Design (SPC-design) <a id="SPC-design" />
 ```yaml @
 subparts:
   - artifact
@@ -82,7 +84,7 @@ Artifact attributes like this:
       - tst-unit
     ```
 
-## Settings (SPC-design.settings) <a id="SPC-design.settings"></a>
+## Settings (SPC-design.settings) <a id="SPC-design.settings" />
 > _code: [SPC-design.settings]_
 
 Artifacts are injected from the `--doc` markdown design document. All
@@ -112,7 +114,7 @@ documentation and to source code. It has the following attributes:
 - `done`: force an artifact to be considered specified and tested
 
 
-## Code Links (SPC-design.code) {#SPC-design.code}
+## Code Links (SPC-design.code) <a id="SPC-design.code" />
 > _code: [SPC-design.code]_
 
 Artifacts are linked in code by:
@@ -125,7 +127,7 @@ Artifacts are linked in code by:
 Artifact will run a regular expression over all files found in `code_paths` and
 will mark artifacts as specified/tested if they are linked in code.
 
-## Lints (SPC-design.lint) {#SPC-design.lint}
+## Lints (SPC-design.lint) <a id="SPC-design.lint" />
 > Note: This is not yet implemented
 
 The lint command will find errors in the design document, and how it is
@@ -141,7 +143,7 @@ reflected in the code:
 - A link being found in code that does not have the `doc_url` prefixed.
   (i.e. artifact expects links in code to look like `myurl.com/design#REQ-foo`)
 
-## Multi-project designs (SPC-design.multi) {#SPC-design.multi}
+## Multi-project designs (SPC-design.multi) <a id="SPC-design.multi" /a>
 > Not yet implemented, design phase only
 
 Artifact's previous design fell short of supporting multiple different designs,
@@ -163,7 +165,7 @@ metadata serialized so that other projects can link to it.
 In this way, multi-file
 
 
-## Unit Tests {#SPC-design.tst-unittests}
+## Unit Tests (SPC-design.tst-unittests) <a id="SPC-design.tst-unittests" />
 The unit tests offer almost complete coverage. Nearly all of the features
 are tested using a data-driven approach. There is a markdown file, with
 a yaml file of the same name. The yml file has the expected value after
@@ -188,13 +190,6 @@ Unless you explicitly state otherwise, any contribution intentionally submitted
 for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
 
-[artifact]: https://github.com/vitiral/artifact
-[anchor_txt]: https://github.com/vitiral/anchor_txt
-
-[SPC-design]: https://github.com/vitiral/artifact/blob/master/artifact_py/__init__.py#L20
-[SPC-design.artifact]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L28
-[SPC-design.code]: https://github.com/vitiral/artifact/blob/master/artifact_py/code.py#L17
-[SPC-design.settings]: https://github.com/vitiral/artifact/blob/master/artifact_py/settings.py#L29
 
 # Metadata
 
@@ -215,3 +210,12 @@ artifact:
   code_url:
     "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
 ```
+
+[artifact]: https://github.com/vitiral/artifact
+[anchor_txt]: https://github.com/vitiral/anchor_txt
+
+[SPC-design]: https://github.com/vitiral/artifact/blob/master/artifact_py/__init__.py#L20
+[SPC-design.artifact]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L28
+[SPC-design.code]: https://github.com/vitiral/artifact/blob/master/artifact_py/code.py#L17
+[SPC-design.settings]: https://github.com/vitiral/artifact/blob/master/artifact_py/settings.py#L29
+
