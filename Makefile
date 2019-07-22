@@ -1,8 +1,8 @@
-check: fix lint test
+check: fix test
 	# SHIP IT!
 
 ship: check
-	rm -rf pycheck/
+	rm -rf pycheck/ dist/
 	virtualenv --python=python3 pycheck
 	pycheck/bin/pip install .
 	py3/bin/python setup.py sdist

@@ -7,32 +7,37 @@ artifact necessary to put it in a build system. No featureful cli, no web-ui.
 Just parsing and exporting of json/markdown/etc.
 
 At the same time, this is not a strict rewrite. It is a reimagining and will
-probably guide the development of artifact 3.0. The primary differences will
-be:
+probably guide the development of artifact 3.0.
+
+Install with `pip install artifact_py`. It should work in python 2.7+ and 3+
+
+## Differences with [artifact]
+
+The primary differences will be:
 - The use of the new [anchor_txt] markdown attribute format, developed
   specifically for this project to not have dependencies on any specific
   markdown implementation.
-- Removal of `.art/settings.toml`, replaced with an attribute block at the top
-  of the root artifact file.
+- Removal of `.art/settings.toml`, replaced with an attribute block anywhere in
+  the markdown file.
 - Massive simpliication of the cmdline tool. This may be improved in the future.
 - A few minor tweaks to simplify how artifacts are specified and linked.
   - Markdown can be exported _in place_ -- almost none of the document has to
     be changed.
   - Artifacts are now specified by the anchor in a header. Conventionally it
     will look like `# This is my spec (SPC-mine) {#SPC-mine}`. The
-    `{#SPC-mine}` is a standard markdown anchor used to create a reference. The
-    `(SPC-mine)` is by-convention so that humans can see that the header is
-    specifying an artifact.
+    `{#SPC-mine}` is a (not-quite) standard markdown anchor used to create a
+    reference. The `(SPC-mine)` is by-convention so that humans can see that
+    the header is specifying an artifact.
     - Note: `anchor_txt` also supported the html anchor `<a id="SPC-mine" />`,
       which is what is necessary in github
   - Artifact attributes are specified with a fenced code block. See [SPC-design]
     for an example.
-  - Removal of `[[REQ-foo]]` references. Instead you just use `[REQ-foo]` and
+  - Removal of `[[REQ-foo]]` references. Instead you just use `[@REQ-foo]` and
     `art export --format md -i`  will put your standard markdown reference
-    links at the bottom of your document.
+    links at the bottom of your document. (i.e. `[@REQ-foo]: url/to/code.py`
   - Removal of specifying subparts (formerly called subnames) via
     `[[REQ-foo.subpart]]`. Simply specify them in your attributes with partof,
-    and link to the code in your deisign doc with `[REQ-foo.subpart]`.
+    and link to the code in your deisign doc with `[@REQ-foo.subpart]`.
   - Has no special support for graphviz.
   - No exporting of the relationship of artifacts to the markdown file itself.
     In the author's opinion this frequently just added to clutter and was not
@@ -85,7 +90,7 @@ Artifact attributes like this:
     ```
 
 ## Settings (SPC-design.settings) <a id="SPC-design.settings" />
-> _code: [SPC-design.settings]_
+> _code: [@SPC-design.settings]_
 
 Artifacts are injected from the `--doc` markdown design document. All
 settings/attributes are provided using the [anchor_txt] format. Settings
@@ -100,7 +105,7 @@ in the document:
 
 
 ## Artifact (SPC-design.artifact) <a id="SPC-design.artifact" />
-> _code: [SPC-design.artifact]_
+> _code: [@SPC-design.artifact]_
 
 An artifact is a piece of documentation that can be linked to other pieces of
 documentation and to source code. It has the following attributes:
@@ -115,7 +120,7 @@ documentation and to source code. It has the following attributes:
 
 
 ## Code Links (SPC-design.code) <a id="SPC-design.code" />
-> _code: [SPC-design.code]_
+> _code: [@SPC-design.code]_
 
 Artifacts are linked in code by:
 - Defining an artifact name or subpart
@@ -214,8 +219,8 @@ artifact:
 [artifact]: https://github.com/vitiral/artifact
 [anchor_txt]: https://github.com/vitiral/anchor_txt
 
-[SPC-design]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/__init__.py#L21
-[SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/artifact.py#L29
-[SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/code.py#L18
-[SPC-design.settings]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/settings.py#L30
+[@SPC-design]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/__init__.py#L21
+[@SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/artifact.py#L29
+[@SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/code.py#L18
+[@SPC-design.settings]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/settings.py#L30
 

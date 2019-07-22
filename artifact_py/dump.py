@@ -8,6 +8,9 @@ import six
 from . import code
 from . import artifact
 
+NAME_REFERENCE_STR = '@?' + code.NAME_FULL_STR
+NAME_REFERENCE_RE = re.compile(NAME_REFERENCE_STR, re.I)
+
 
 def dump_project(project, with_links=True):
     """Dump the artifact project with fresh reference links."""
@@ -79,7 +82,7 @@ def reference_link(settings, name, codeloc, subpart=None):
         line=codeloc.line + 1,
     )
     return anchor_txt.ReferenceLink.from_parts(
-        reference=reference,
+        reference='@' + reference,
         link=link,
     )
 
@@ -112,4 +115,4 @@ def scrub_sections_recurse(section):
 
 def _is_artifact_reference(content):
     return (isinstance(content, anchor_txt.ReferenceLink)
-            and code.NAME_FULL_RE.match(content.reference))
+            and NAME_REFERENCE_RE.match(content.reference))

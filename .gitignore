@@ -2,4 +2,4 @@ py2/
 py3/
 pycheck/
 dist/
-anchor_txt.egg-info/
+artifact_py.egg-info/
