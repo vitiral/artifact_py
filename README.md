@@ -214,8 +214,8 @@ artifact:
 [artifact]: https://github.com/vitiral/artifact
 [anchor_txt]: https://github.com/vitiral/anchor_txt
 
-[SPC-design]: https://github.com/vitiral/artifact_py/blob/master/
-[SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/
-[SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/
-[SPC-design.settings]: https://github.com/vitiral/artifact_py/blob/master/
+[SPC-design]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/__init__.py#L20
+[SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/artifact.py#L28
+[SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/code.py#L17
+[SPC-design.settings]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/settings.py#L29
 
