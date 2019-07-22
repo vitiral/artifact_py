@@ -76,7 +76,7 @@ def reference_link(settings, name, codeloc, subpart=None):
 
     link = settings.code_url.format(
         file=settings.relpath(codeloc.file),
-        line=codeloc.line,
+        line=codeloc.line + 1,
     )
     return anchor_txt.ReferenceLink.from_parts(
         reference=reference,

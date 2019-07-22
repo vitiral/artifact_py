@@ -29,8 +29,8 @@ partof:
   - SPC-simple
 ```
 
-[SPC-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L3
-[SPC-simple.deep]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/deep/deep.py#L0
-[SPC-simple.script]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/script.py#L0
-[SPC-simple.simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L1
-[SPC-simple.tst-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L1
+[SPC-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L4
+[SPC-simple.deep]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/deep/deep.py#L1
+[SPC-simple.script]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/script.py#L1
+[SPC-simple.simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L2
+[SPC-simple.tst-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L2
