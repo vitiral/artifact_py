@@ -211,7 +211,6 @@ artifact:
     - tests/projects/
     - tests/test_code.py
 
-
   code_url:
     "https://github.com/vitiral/artifact_py/blob/master/{file}#L{line}"
 ```
