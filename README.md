@@ -38,6 +38,8 @@ subparts:
   - artifact
   - settings
   - code
+  - lint
+  - tst-unittests
 ```
 
 ## Settings (#SPC-design.settings}
@@ -77,6 +79,32 @@ Artifacts are linked in code by:
 Artifact will run a regular expression over all files found in `code_paths` and
 will mark artifacts as specified/tested if they are linked in code.
 
+## Lints {#SPC-design.lint}
+> Note: This is not yet implemented
+
+The lint command will find errors in the design document, and how it is
+reflected in the code:
+
+- `partof` links that do not exist.
+- A `REQ` or `SPC` being `partof` a `TST`
+- Extra `impl` links in code
+- Having an artifact specified as "done" having an impl
+- Artifact or subpart like links in text (i.e. `[REQ-does-not-exist]`) that do
+  not exist.
+- Design docs not being updated (run `artifact export --format md -i` to fix).
+- A link being found in code that does not have the `doc_url` prefixed.
+  (i.e. artifact expects links in code to look like `myurl.com/design#REQ-foo`)
+
+
+## Unit Tests {#SPC-design.tst-unittests}
+The unit tests offer almost complete coverage. Nearly all of the features
+are tested using a data-driven approach. There is a markdown file, with
+a yaml file of the same name. The yml file has the expected value after
+parsing the markdown file.
+
+Also tested:
+- That exporting the project results in the expected markdown file
+
 
 # License
 
@@ -94,4 +122,5 @@ for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 be dual licensed as above, without any additional terms or conditions.
 
 [SPC-design.artifact]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L28
+[SPC-design.settings]: https://github.com/vitiral/artifact/blob/master/artifact_py/settings.py#L29
 

@@ -23,6 +23,13 @@ from . import utils
 
 # code_url = "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
 class Settings:
+    """
+    The settings which define how to load the artifacts and how to create url
+    links.
+
+    See #SPC-design.settings
+
+    """
     def __init__(self, root_file, root_dir, code_paths, exclude_code_paths,
                  code_url, extra):
         self.root_file = root_file
