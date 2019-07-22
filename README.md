@@ -201,6 +201,8 @@ be dual licensed as above, without any additional terms or conditions.
 [artifact]: https://github.com/vitiral/artifact
 [anchor_txt]: https://github.com/vitiral/anchor_txt
 
+[SPC-design]: https://github.com/vitiral/artifact/blob/master/artifact_py/__init__.py#L20
 [SPC-design.artifact]: https://github.com/vitiral/artifact/blob/master/artifact_py/artifact.py#L28
+[SPC-design.code]: https://github.com/vitiral/artifact/blob/master/artifact_py/code.py#L17
 [SPC-design.settings]: https://github.com/vitiral/artifact/blob/master/artifact_py/settings.py#L29
 
