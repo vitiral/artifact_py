@@ -169,7 +169,7 @@ reflected in the code:
 - A link being found in code that does not have the `doc_url` prefixed.
   (i.e. artifact expects links in code to look like `myurl.com/design#REQ-foo`)
 
-## Multi-project designs (SPC-design.multi) <a id="SPC-design.multi" /a>
+## Multi-project designs (SPC-design.multi) <a id="SPC-design.multi" />
 > Not yet implemented, design phase only
 >
 > _code: [@SPC-design.multi]_
