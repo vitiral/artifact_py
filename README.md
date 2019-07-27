@@ -183,8 +183,6 @@ Because the designs are only _linked_ together (not dependent on eachother for
 completion ratios), each design can be calculated independently and it's
 metadata serialized so that other projects can link to it.
 
-In this way, multi-file
-
 
 ## Unit Tests (SPC-design.tst-unittests) <a id="SPC-design.tst-unittests" />
 The unit tests offer almost complete coverage. Nearly all of the features
