@@ -192,6 +192,8 @@ metadata serialized so that other projects can link to it.
 
 
 ## Unit Tests (SPC-design.tst-unittests) <a id="SPC-design.tst-unittests" />
+> _code: [@SPC-design.tst-unittests]_
+
 The unit tests offer almost complete coverage. Nearly all of the features
 are tested using a data-driven approach. There is a markdown file, with
 a yaml file of the same name. The yml file has the expected value after
@@ -242,6 +244,7 @@ artifact:
 [@SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/artifact.py#L29
 [@SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/code.py#L18
 [@SPC-design.settings]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/settings.py#L30
+[@SPC-design.tst-unittests]: https://github.com/vitiral/artifact_py/blob/master/tests/__init__.py#L1
 [@SPC-design]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/__init__.py#L21
 [SPC-design.artifact]: #SPC-design.artifact
 [SPC-design.code]: #SPC-design.code
