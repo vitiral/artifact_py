@@ -56,6 +56,22 @@ Features still to be added:
   and may be added later.
 - A stable json output format. It is still in flux.
 
+# Contributing
+
+See [LICENSE](#license) for conditions of contributions.
+
+Code is in python. Test using the following:
+
+```
+# create the python virtualenv's locally
+make init
+
+# run tests against python3
+make test3
+
+# run all checks required to ship
+make check
+```
 
 # Design (SPC-design) <a id="SPC-design" />
 ```yaml @
