@@ -21,7 +21,7 @@ The primary differences will be:
   markdown implementation.
 - Removal of `.art/settings.toml`, replaced with an attribute block anywhere in
   the markdown file.
-- Massive simpliication of the cmdline tool. This may be improved in the future.
+- Massive simplification of the cmdline tool. The CLI may be improved in the future.
 - A few minor tweaks to simplify how artifacts are specified and linked.
   - Markdown can be exported _in place_ -- almost none of the document has to
     be changed.

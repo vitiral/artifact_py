@@ -47,15 +47,23 @@ def get_reference_links(project):
 
     reference_links = []
 
+    for artifact in project.artifacts:
+        name = artifact.name
+        reference_links.append(
+            reference_link_inline(project.settings, name))
+        for subpart in artifact.subparts:
+            reference_links.append(
+                reference_link_inline(project.settings, name, subpart=subpart))
+
     for name, impl in six.iteritems(project.impls):
         if impl.primary:
             reference_links.append(
-                reference_link(project.settings, name, impl.primary[0]))
+                reference_link_code(project.settings, name, impl.primary[0]))
 
         subparts = sorted(six.iteritems(impl.secondary), key=lambda x: x[0])
         for subpart, codelocs in subparts:
             reference_links.append(
-                reference_link(project.settings,
+                reference_link_code(project.settings,
                                name,
                                codelocs[0],
                                subpart=subpart))
@@ -65,17 +73,25 @@ def get_reference_links(project):
     for reflink in reference_links:
         lines.extend(reflink.to_lines())
 
+    lines.sort()
+
     if lines:
         lines.append('')
 
     return lines
 
 
-def reference_link(settings, name, codeloc, subpart=None):
-    if subpart is None:
-        reference = name.raw
-    else:
-        reference = '{}.{}'.format(name.raw, subpart.raw)
+def reference_link_inline(settings, name, subpart=None):
+    reference = reference_str(name, subpart)
+
+    return anchor_txt.ReferenceLink.from_parts(
+        reference=reference,
+        link='#' + reference,
+    )
+
+
+def reference_link_code(settings, name, codeloc, subpart=None):
+    reference = reference_str(name, subpart)
 
     link = settings.code_url.format(
         file=settings.relpath(codeloc.file),
@@ -85,6 +101,12 @@ def reference_link(settings, name, codeloc, subpart=None):
         reference='@' + reference,
         link=link,
     )
+
+def reference_str(name, subpart=None):
+    if subpart is None:
+        return name.raw
+    else:
+        return '{}.{}'.format(name.raw, subpart.raw)
 
 
 def get_last_section(project):
