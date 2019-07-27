@@ -14,6 +14,8 @@ Install with `pip install artifact_py`. It should work in python 2.7+ and 3+
 ## Differences with [artifact]
 
 The primary differences will be:
+- Written in python instead of rust for easier inclusion in legacy build
+  systems.
 - The use of the new [anchor_txt] markdown attribute format, developed
   specifically for this project to not have dependencies on any specific
   markdown implementation.
