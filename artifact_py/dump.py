@@ -49,8 +49,7 @@ def get_reference_links(project):
 
     for artifact in project.artifacts:
         name = artifact.name
-        reference_links.append(
-            reference_link_inline(project.settings, name))
+        reference_links.append(reference_link_inline(project.settings, name))
         for subpart in artifact.subparts:
             reference_links.append(
                 reference_link_inline(project.settings, name, subpart=subpart))
@@ -64,9 +63,9 @@ def get_reference_links(project):
         for subpart, codelocs in subparts:
             reference_links.append(
                 reference_link_code(project.settings,
-                               name,
-                               codelocs[0],
-                               subpart=subpart))
+                                    name,
+                                    codelocs[0],
+                                    subpart=subpart))
 
     lines = []
 
@@ -101,6 +100,7 @@ def reference_link_code(settings, name, codeloc, subpart=None):
         reference='@' + reference,
         link=link,
     )
+
 
 def reference_str(name, subpart=None):
     if subpart is None:
