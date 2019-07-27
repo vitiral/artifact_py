@@ -34,9 +34,10 @@ The primary differences will be:
       which is what is necessary in github
   - Artifact attributes are specified with a fenced code block. See [SPC-design]
     for an example.
-  - Removal of `[[REQ-foo]]` references. Instead you just use `[@REQ-foo]` and
-    `art export --format md -i`  will put your standard markdown reference
-    links at the bottom of your document. (i.e. `[@REQ-foo]: url/to/code.py`
+  - Removal of `[[REQ-foo]]` references. Instead you just use `[REQ-foo]` or `[@REQ-foo]` for code.
+    When you run `art export --format md -i`  they will strip out references that look like
+    `ART-foo.bar` and insert the correct links at the bottom of your document.
+    (i.e. `[@REQ-foo]: url/to/code.py`
   - Removal of specifying subparts (formerly called subnames) via
     `[[REQ-foo.subpart]]`. Simply specify them in your attributes with partof,
     and link to the code in your deisign doc with `[@REQ-foo.subpart]`.
@@ -152,6 +153,8 @@ will mark artifacts as specified/tested if they are linked in code.
 
 ## Lints (SPC-design.lint) <a id="SPC-design.lint" />
 > Note: This is not yet implemented
+>
+> _code: [@SPC-design.lint]_
 
 The lint command will find errors in the design document, and how it is
 reflected in the code:
@@ -168,6 +171,8 @@ reflected in the code:
 
 ## Multi-project designs (SPC-design.multi) <a id="SPC-design.multi" /a>
 > Not yet implemented, design phase only
+>
+> _code: [@SPC-design.multi]_
 
 Artifact's previous design fell short of supporting multiple different designs,
 especially at scale. This rewrite/reimainging immagines the following principles:
