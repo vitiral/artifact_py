@@ -14,16 +14,17 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""A collection of utility functions and classes used throughout artifact_py."""
 from __future__ import unicode_literals, division
 import os
 import sys
 
 from collections import OrderedDict
 import six
-from anchor_txt.utils import to_unicode
+from anchor_txt.utils import to_unicode # pylint: disable=unused-import
 
 
-class KeyCmp(object):
+class KeyCmp(object): # pylint: disable=too-few-public-methods
     """An object which is key comparable."""
     def __init__(self, key):
         self.key = key
@@ -38,8 +39,7 @@ class KeyCmp(object):
             return 0
         elif self.key < other.key:
             return -1
-        else:
-            return 1
+        return 1
 
     def __lt__(self, other):
         return self._cmp(other) < 0
@@ -61,20 +61,24 @@ class KeyCmp(object):
 
 
 def abspath(path):
+    """Get an absolute representation of a path, raising an error if it contains tilde expansion."""
     if '~' in path:
         raise ValueError("Path cannot use home directory '~'")
     return os.path.abspath(path)
 
 
-def joinabs(a, b):
-    return abspath(os.path.join(a, b))
+def joinabs(path, sub_path):
+    """Join absolute paths."""
+    return abspath(os.path.join(path, sub_path))
 
 
 def joinabs_all(root_dir, paths):
+    """Join multiple absolute paths."""
     return [joinabs(root_dir, p) for p in paths]
 
 
 def ordered_recurse(value):
+    """Recursively order nested dicts and lists at all levels."""
     if isinstance(value, list):
         return [ordered_recurse(v) for v in value]
     if isinstance(value, dict):
@@ -89,18 +93,21 @@ def ordered_recurse(value):
 
 
 def write_lines(lines, output):
+    """Write a collection to an output, separating each item with a line break."""
     for line in lines:
         output.write(line)
         output.write('\n')
 
 
 def flush_output(output):
+    """Flush, and force write to disk if not stdout/stderr, the given output buffer."""
     output.flush()
     if output not in (sys.stdout, sys.stderr):
         os.fsync(output)
 
 
 def ensure_str(name, value, allow_none=False):
+    """Raise an error if value is not a str and, optionally, is None."""
     if allow_none and value is None:
         return value
 
@@ -109,14 +116,16 @@ def ensure_str(name, value, allow_none=False):
     return value
 
 
-def ensure_list(name, value, itemtype=None):
+def ensure_list(name, value, item_type=None):
+    """Raise an error if value is not a list or, optionally, contains elements
+    not of a specified type."""
     if not isinstance(value, list):
         raise TypeError("{} must be a list: {}".format(name, value))
-    if itemtype:
+    if item_type:
         for item in value:
-            if not isinstance(item, itemtype):
+            if not isinstance(item, item_type):
                 raise TypeError("{} contain only {}: {}".format(
-                    name, itemtype, item))
+                    name, item_type, item))
 
     return value
 
@@ -125,5 +134,4 @@ def ratio(value, count):
     """compute ratio but ignore count=0"""
     if count == 0:
         return 0.0
-    else:
-        return value / count
+    return value / count

@@ -14,12 +14,12 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
-from __future__ import print_function, unicode_literals, division
 """
-A reimiging of artifact.
+A reimagining of artifact.
 
 See README.md and #SPC-design
 """
+from __future__ import print_function, unicode_literals, division
 import sys
 import argparse
 import json
@@ -29,8 +29,12 @@ from . import utils
 from . import load
 from . import dump
 
-
-def main(argv):
+# TODO: break up large branching structure in main into smaller functions:
+#   - argument parsing
+#   - export mode
+#   - show mode
+#   - eventually, lint mode and other modes
+def main(argv): # pylint: disable=too-many-branches
     """Main function for cmdline."""
     parser = argparse.ArgumentParser(
         description='The design documentation tool for everyone.')
@@ -68,6 +72,7 @@ def main(argv):
     args = parser.parse_args(argv)
 
     def fail(msg, print_help=False):
+        """Print a message and, optionally, the argument parser help message."""
         print(msg)
         if print_help:
             parser.print_help()
@@ -107,13 +112,12 @@ def main(argv):
                 output.close()
 
     elif args.mode == 'show':
-        length = len(artifacts)
         if args.type == 'spc':
-            for a in sorted(artifacts, key=lambda a: a.name):
-                print('{}\t{}'.format(a.name.key, a.completion.spc))
+            for art in sorted(artifacts, key=lambda art: art.name):
+                print('{}\t{}'.format(art.name.key, art.completion.spc))
         elif args.type == 'tst':
-            for a in sorted(artifacts, key=lambda a: a.name):
-                print('{}\t{}'.format(a.name.key, a.completion.tst))
+            for art in sorted(artifacts, key=lambda art: art.name):
+                print('{}\t{}'.format(art.name.key, art.completion.tst))
         else:
             return fail("Unrecognized type: " + args.type, print_help=True)
 
