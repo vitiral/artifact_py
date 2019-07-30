@@ -14,6 +14,7 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Module for artifact document settings"""
 from __future__ import unicode_literals
 import os
 import six
@@ -51,14 +52,14 @@ class Settings:
         code_paths = utils.ensure_list(
             'code_paths',
             dct.pop('code_paths', []),
-            itemtype=six.text_type,
+            item_type=six.text_type,
         )
         code_paths = utils.joinabs_all(root_dir, code_paths)
 
         exclude_code_paths = utils.ensure_list(
             'exclude_code_paths',
             dct.pop('exclude_code_paths', []),
-            itemtype=six.text_type,
+            item_type=six.text_type,
         )
         exclude_code_paths = utils.joinabs_all(root_dir, exclude_code_paths)
 
@@ -80,9 +81,6 @@ class Settings:
     def relpath_all(self, paths):
         """Return the relative paths to the root directory."""
         return [self.relpath(p) for p in paths]
-
-    def serialize_list(self, lst):
-        return [v.serialize(self) for v in lst]
 
     def serialize_list(self, lst):
         return [v.serialize(self) for v in lst]
