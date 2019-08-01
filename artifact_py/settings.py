@@ -23,7 +23,7 @@ from . import utils
 
 
 # code_url = "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
-class Settings:
+class Settings(object):
     """
     The settings which define how to load the artifacts and how to create url
     links.
@@ -31,7 +31,9 @@ class Settings:
     See #SPC-design.settings
 
     """
-    def __init__(self, root_file, root_dir, code_paths, exclude_code_paths,
+    # TODO break up Settings into a composite of related settings groups to
+    # deal with ever-expanding fields and constructor parameters
+    def __init__(self, root_file, root_dir, code_paths, exclude_code_paths, # pylint: disable=too-many-arguments
                  code_url, extra):
         self.root_file = root_file
         self.root_dir = root_dir
@@ -46,6 +48,7 @@ class Settings:
 
     @classmethod
     def from_dict_consume(cls, dct, root_file):
+        """Consume the given dictionary, returning a Settings instance."""
         root_dir = utils.ensure_str('root_dir', dct.pop('root_dir', ''))
         root_dir = utils.joinabs(os.path.dirname(root_file), root_dir)
 
