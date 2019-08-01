@@ -54,22 +54,18 @@ class Name(utils.KeyCmp):
         return cls(key=raw.upper(), art_type=match.group(1).upper(), raw=raw)
 
     def is_req(self):
-        """Return whether or not this name represents a REQ Artifact."""
         return self.art_type == REQ
 
     def is_spc(self):
-        """Return whether or not this name represents a SPC Artifact."""
         return self.art_type == SPC
 
     def is_tst(self):
-        """Return whether or not this name represents a TST Artifact."""
         return self.art_type == TST
 
     def __repr__(self):
         return self.raw
 
     def serialize(self, _s):
-        """Return the raw text for this Name, for serialization purposes."""
         return self.raw
 
 
@@ -80,7 +76,6 @@ class SubPart(utils.KeyCmp):
         self.raw = raw
 
     def is_tst(self):
-        """Return whether or not this subpart represents a TST Artifact."""
         return self.key.startswith("TST")
 
     @classmethod
@@ -96,5 +91,4 @@ class SubPart(utils.KeyCmp):
         return self.raw
 
     def serialize(self, _settings):
-        """Return the raw text for this SubPart, for serialization purposes."""
         return self.raw

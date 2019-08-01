@@ -19,14 +19,14 @@ init:
 	virtualenv --python=python3 py3
 	py3/bin/pip install -r requirements.txt
 	py3/bin/pip install -e ../anchor_txt
-	py3/bin/pip install pytest yapf pylint twine
+	py3/bin/pip install pytest yapf pylint twine pylint-exit
 
 fix:
 	py3/bin/yapf --in-place -r artifact_py tests
 	py3/bin/python -m artifact_py export -i --format md
 
 lint:
-	py3/bin/pylint artifact_py
+	py3/bin/pylint artifact_py || pylint-exit $?
 
 test2:
 	# Testing python2

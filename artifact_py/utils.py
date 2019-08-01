@@ -21,10 +21,11 @@ import sys
 
 from collections import OrderedDict
 import six
+# this import is forwarded, so it is not unused - but the linter doesn't know!
 from anchor_txt.utils import to_unicode # pylint: disable=unused-import
 
 
-class KeyCmp(object): # pylint: disable=too-few-public-methods
+class KeyCmp(object):
     """An object which is key comparable."""
     def __init__(self, key):
         self.key = key
@@ -68,12 +69,10 @@ def abspath(path):
 
 
 def joinabs(path, sub_path):
-    """Join absolute paths."""
     return abspath(os.path.join(path, sub_path))
 
 
 def joinabs_all(root_dir, paths):
-    """Join multiple absolute paths."""
     return [joinabs(root_dir, p) for p in paths]
 
 
