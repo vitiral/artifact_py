@@ -29,12 +29,13 @@ from . import utils
 from . import load
 from . import dump
 
+
 # TODO: break up large branching structure in main into smaller functions:
 #   - argument parsing
 #   - export mode
 #   - show mode
 #   - eventually, lint mode and other modes
-def main(argv): # pylint: disable=too-many-branches
+def main(argv):  # pylint: disable=too-many-branches
     """Main function for cmdline."""
     parser = argparse.ArgumentParser(
         description='The design documentation tool for everyone.')

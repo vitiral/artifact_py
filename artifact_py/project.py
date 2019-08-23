@@ -14,15 +14,16 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Project class."""
 
 from __future__ import unicode_literals
-import anchor_txt
-import six
-
-from . import utils
 
 
-class Project:
+class Project(object):
+    """Encapsulates an entire project.
+
+    Includes the settings, design (artifacts) and code impls.
+    """
     def __init__(self, settings, artifacts, root_section, impls):
         self.settings = settings
         self.artifacts = artifacts

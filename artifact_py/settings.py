@@ -31,10 +31,18 @@ class Settings(object):
     See #SPC-design.settings
 
     """
+
     # TODO break up Settings into a composite of related settings groups to
     # deal with ever-expanding fields and constructor parameters
-    def __init__(self, root_file, root_dir, code_paths, exclude_code_paths, # pylint: disable=too-many-arguments
-                 code_url, extra):
+    # pylint: disable=too-many-arguments
+    def __init__(
+            self,
+            root_file,
+            root_dir,
+            code_paths,
+            exclude_code_paths,  # pylint: disable=too-many-arguments
+            code_url,
+            extra):
         self.root_file = root_file
         self.root_dir = root_dir
         self.code_paths = code_paths

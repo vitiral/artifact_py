@@ -1,4 +1,20 @@
-import os
+# artifact_py: the design documentation tool made for everyone.
+#
+# Copyright (C) 2019 Rett Berg <github.com/vitiral>
+#
+# The source code is Licensed under either of
+#
+# * Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or
+#   http://www.apache.org/licenses/LICENSE-2.0)
+# * MIT license ([LICENSE-MIT](LICENSE-MIT) or
+#   http://opensource.org/licenses/MIT)
+#
+# at your option.
+#
+# Unless you explicitly state otherwise, any contribution intentionally submitted
+# for inclusion in the work by you, as defined in the Apache-2.0 license, shall
+# be dual licensed as above, without any additional terms or conditions.
+"""Dump data to a string or file."""
 import copy
 import re
 
@@ -42,17 +58,18 @@ def strip_empty_lines(lines):
 
 
 def get_reference_links(project):
+    """Return a project's reference links in markdown format."""
     if project.settings.code_url is None:
-        return
+        return []
 
     reference_links = []
 
-    for artifact in project.artifacts:
-        name = artifact.name
-        reference_links.append(reference_link_inline(project.settings, name))
-        for subpart in artifact.subparts:
-            reference_links.append(
-                reference_link_inline(project.settings, name, subpart=subpart))
+    for art in project.artifacts:
+        name = art.name
+        reference_links.append(reference_link_inline(name))
+        for subpart in art.subparts:
+            reference_links.append(reference_link_inline(name,
+                                                         subpart=subpart))
 
     for name, impl in six.iteritems(project.impls):
         if impl.primary:
@@ -80,7 +97,7 @@ def get_reference_links(project):
     return lines
 
 
-def reference_link_inline(settings, name, subpart=None):
+def reference_link_inline(name, subpart=None):
     reference = reference_str(name, subpart)
 
     return anchor_txt.ReferenceLink.from_parts(
@@ -105,8 +122,7 @@ def reference_link_code(settings, name, codeloc, subpart=None):
 def reference_str(name, subpart=None):
     if subpart is None:
         return name.raw
-    else:
-        return '{}.{}'.format(name.raw, subpart.raw)
+    return '{}.{}'.format(name.raw, subpart.raw)
 
 
 def get_last_section(project):

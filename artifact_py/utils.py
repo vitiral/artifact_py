@@ -22,7 +22,7 @@ import sys
 from collections import OrderedDict
 import six
 # this import is forwarded, so it is not unused - but the linter doesn't know!
-from anchor_txt.utils import to_unicode # pylint: disable=unused-import
+from anchor_txt.utils import to_unicode  # pylint: disable=unused-import
 
 
 class KeyCmp(object):
@@ -38,7 +38,7 @@ class KeyCmp(object):
             raise TypeError(other)
         if self.key == other.key:
             return 0
-        elif self.key < other.key:
+        if self.key < other.key:
             return -1
         return 1
 
