@@ -143,14 +143,22 @@ def update_impls_line(code_file, impls, linenum, line):
     """update impls with the code impls on the given line of code_file"""
     for match in NAME_TAG_RE.finditer(line):
         codeloc = CodeLoc(code_file, line=linenum)
-        groups = match.groupdict()
-        impl_name = Name.from_str(groups[RE_NAME_KEY])
-        if impl_name not in impls:
-            impls[impl_name] = ImplCode.new()
+        name, subpart = name_from_match(match)
 
-        subpart = groups.get(RE_SUBPART_KEY)
+        if name not in impls:
+            impls[name] = ImplCode.new()
+
         if subpart:
-            subpart = SubPart.from_str(subpart)
-            impls[impl_name].insert_secondary(subpart, codeloc)
+            impls[name].insert_secondary(subpart, codeloc)
         else:
-            impls[impl_name].insert_primary(codeloc)
+            impls[name].insert_primary(codeloc)
+
+
+def name_from_match(match):
+    """Return the name and possibly subname from the match."""
+    groups = match.groupdict()
+    name = Name.from_str(groups[RE_NAME_KEY])
+    subpart = groups.get(RE_SUBPART_KEY)
+    if subpart:
+        subpart = SubPart.from_str(subpart)
+    return name, subpart

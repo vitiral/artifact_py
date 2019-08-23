@@ -18,13 +18,28 @@
 from __future__ import unicode_literals
 
 import six
+import re
+
+import anchor_txt
 
 from . import code
 from .name import format_name
+from . import code
+from . import dump
+
+NAME_REF = r"\[{}\]".format(code.NAME_FULL_STR)
+NAME_REF_RE = re.compile(NAME_REF, re.IGNORECASE)
 
 PARTOF_DNE = "{} is partof {} which does not exist"
 PARTOF_TST = "{} is partof {}. TST types cannot be partof non-TST types."
 IMPL_MULTIPLE = "{} is implemented in code multiple times: {}"
+IMPL_DONE = "{} is implemented in code and marked as done. Code impls: {}"
+REF_INVALID = "{} is referenced in the design but does not exist."
+REF_INVALID_SUBPART = "{} is referenced in the design but subpart {} does not exist."
+PROJ_NOT_UPDATED = (
+    "Design references are out of date. To fix run:"
+    " artifact_py export -i --format md"
+)
 
 
 def lint_project(project):
@@ -38,7 +53,7 @@ class Lints(object):
     """An object for building lints."""
     def __init__(self, project):
         self.project = project
-        self.names = {art.name for art in project.artifacts}
+        self.art_map = {art.name: art for art in project.artifacts}
         self.errors = []
         self.warnings = []
 
@@ -47,12 +62,15 @@ class Lints(object):
         self.lint_partof_exists()
         self.lint_partof_tst()
         self.lint_extra_impls()
+        self.lint_done()
+        self.lint_references()
+        self.lint_export_md()
 
     def lint_partof_exists(self):
         """Lint that all `partof` values exist."""
         for art in self.project.artifacts:
             for partof in art.partof:
-                if partof not in self.names:
+                if partof not in self.art_map:
                     self.errors.append(PARTOF_DNE.format(art.name, partof))
 
     def lint_partof_tst(self):
@@ -80,8 +98,62 @@ class Lints(object):
                         IMPL_MULTIPLE.format(format_name(art.name, sub),
                                              self._format_codelocs(impls)))
 
+    def lint_done(self):
+        """An artifact cannot be marked as `done` and implemented in code."""
+        for art in self.project.artifacts:
+            if isinstance(art.impl, code.ImplCode) and art.done:
+                self.errors.append(
+                    IMPL_DONE.format(art.name,
+                                     self._format_codelocs_impl(art.impl)))
+
+    def lint_references(self):
+        """Lint references in the design doc."""
+        for content in _all_contents(self.project.root_section):
+            if not isinstance(content, anchor_txt.Text):
+                continue
+            for line in content.raw:
+                for match in NAME_REF_RE.finditer(line):
+                    name, subpart = code.name_from_match(match)
+
+                    art = self.art_map.get(name)
+                    if art is None:
+                        self.warnings.append(REF_INVALID.format(
+                            match.group(0)))
+                        continue
+
+                    if subpart and subpart not in art.subparts:
+                        self.warnings.append(
+                            REF_INVALID_SUBPART.format(match.group(0),
+                                                       subpart))
+
+    def lint_export_md(self):
+        """Make sure that a new design doc shouldn't be exported."""
+        correct = '\n'.join(dump.dump_project(self.project))
+        with open(self.project.settings.root_file) as proj_file:
+            existing = proj_file.read()
+
+        if correct != existing:
+            self.warnings.append(PROJ_NOT_UPDATED)
+
     def _format_codelocs(self, locs):
         out = []
         for loc in locs:
             out.append(loc.to_str(self.project.settings))
         return ' '.join(out)
+
+    def _format_codelocs_impl(self, impl):
+        all_locs = []
+        all_locs.extend(impl.primary)
+        for locs in six.itervalues(impl.secondary):
+            all_locs.extend(locs)
+        return self._format_codelocs(all_locs)
+
+
+def _all_contents(section):
+    """Return the contents of a section as an iterator."""
+    for c in section.contents:
+        yield c
+
+    for subsection in section.sections:
+        for c in _all_contents(subsection):
+            yield c

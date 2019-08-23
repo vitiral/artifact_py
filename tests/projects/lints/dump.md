@@ -18,8 +18,20 @@ partof:
 
 subparts:
   - subpart
+
+done: should not be done, but is
 ```
 This artifact is has a partof that does not exist.
+
+Some references that don't exist
+[SPC-dne]
+[SPC-dne.code]
+[@SPC-dne]
+[@SPC-dne.code]
+
+And one that does
+[TST-hi]
+
 
 # Some Test (TST-hi) {#TST-hi}
 This is a test

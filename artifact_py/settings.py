@@ -40,7 +40,7 @@ class Settings(object):
             root_file,
             root_dir,
             code_paths,
-            exclude_code_paths,  # pylint: disable=too-many-arguments
+            exclude_code_paths,
             code_url,
             extra):
         self.root_file = root_file

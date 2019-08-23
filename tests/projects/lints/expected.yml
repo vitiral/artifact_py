@@ -9,7 +9,7 @@ settings:
         - src/ignore.py
     extra: {}
 artifacts:
-    - done: null
+    - done: "should not be done, but is"
       completion: {spc: 1.0, tst: 0.0}
       file: README.md
       name: SPC-fail

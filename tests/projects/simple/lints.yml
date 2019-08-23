@@ -1,2 +1,3 @@
 errors: []
-warnings: []
+warnings:
+  - 'Design references are out of date. To fix run: artifact_py export -i --format md'
