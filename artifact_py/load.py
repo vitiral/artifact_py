@@ -14,10 +14,9 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Module for loading projects from a root file."""
 from __future__ import unicode_literals, division
-import copy
 
-import six
 import anchor_txt
 import networkx as nx
 
@@ -32,7 +31,8 @@ from . import utils
 SETTINGS_KEY = 'artifact'
 
 
-class ProjectBuilder:
+class ProjectBuilder(object):
+    """Loads a project."""
     def __init__(self, root_file, root_section):
         self.root_file = root_file
         self.root_section = root_section
@@ -43,6 +43,10 @@ class ProjectBuilder:
         self.graph = None
 
     def try_add_builder(self, section):
+        """Attempt to add an artifact builder.
+
+        If it does not have a valid header, ignore.
+        """
         if not section.header:
             # root section is not an artifact
             return
@@ -64,10 +68,10 @@ class ProjectBuilder:
     def update_builder_map(self):
         self.builder_map = {b.name: b for b in self.builders}
 
-    def set_settings(self, settings):
+    def set_settings(self, proj_settings):
         if self.settings:
             raise ValueError("two settings found at " + self.root_file)
-        self.settings = settings
+        self.settings = proj_settings
 
     def set_impls(self, impls):
         self.impls = impls
@@ -81,6 +85,7 @@ class ProjectBuilder:
         self.graph = graph
 
     def build(self):
+        """Build the project from the values set."""
         assert self.settings is not None
         assert self.impls is not None
         assert self.builder_map is not None
@@ -95,12 +100,13 @@ class ProjectBuilder:
 
 
 def from_root_file(root_file):
+    """Load a project from a root file."""
     root_section = anchor_txt.Section.from_md_path(root_file)
-    project_builder = load_project_builder(root_section, root_file)
+    project_builder = _load_project_builder(root_section, root_file)
 
-    settings = find_settings(root_section, root_file)
+    proj_settings = find_settings(root_section, root_file)
 
-    project_builder.set_impls(code.find_impls(settings))
+    project_builder.set_impls(code.find_impls(proj_settings))
 
     load_graph_and_parts(project_builder)
     update_completion(project_builder)
@@ -108,7 +114,7 @@ def from_root_file(root_file):
     return project_builder.build()
 
 
-def load_project_builder(root_section, root_file):
+def _load_project_builder(root_section, root_file):
     project_builder = ProjectBuilder(root_file=root_file,
                                      root_section=root_section)
     _recurse_section(project_builder, root_section)
@@ -152,8 +158,8 @@ def _find_settings_recurse(section, root_file):
         return settings.Settings.from_dict(section.attributes[SETTINGS_KEY],
                                            root_file)
 
-    for section in section.sections:
-        out = _find_settings_recurse(section, root_file)
+    for sec in section.sections:
+        out = _find_settings_recurse(sec, root_file)
         if out:
             return out
 
@@ -161,6 +167,7 @@ def _find_settings_recurse(section, root_file):
 
 
 def load_graph_and_parts(project_builder):
+    """Load the relationship graph of the artifacts and set their parts."""
     graph = nx.DiGraph()
 
     # create the graph
@@ -176,7 +183,9 @@ def load_graph_and_parts(project_builder):
     project_builder.set_graph(graph)
 
 
+# pylint: disable=too-many-locals
 def update_completion(project_builder):
+    """Compute and update the completion values of all artifacts."""
     builder_map = project_builder.builder_map
     graph = project_builder.graph
 
@@ -186,19 +195,19 @@ def update_completion(project_builder):
     specified = {}
     tested = {}
 
-    for name in reversed(sorted_graph):
-        builder = builder_map.get(name)
+    for art_name in reversed(sorted_graph):
+        builder = builder_map.get(art_name)
         stats = completion.impl_to_statistics(builder.impl, builder.subparts)
         (count_spc, value_spc, count_tst, value_tst) = stats
 
-        if name.is_tst():
-            for name in graph.neighbors(name):
-                value_spc += specified[name]
+        if art_name.is_tst():
+            for neighbor_name in graph.neighbors(art_name):
+                value_spc += specified[neighbor_name]
                 count_spc += 1
             value_tst = value_spc
             count_tst = count_spc
         else:
-            for neighbor in graph.neighbors(name):
+            for neighbor in graph.neighbors(art_name):
                 value_tst += tested[neighbor]
                 count_tst += 1
 
@@ -206,8 +215,8 @@ def update_completion(project_builder):
                     value_spc += specified[neighbor]
                     count_spc += 1
 
-        specified[name] = utils.ratio(value_spc, count_spc)
-        tested[name] = utils.ratio(value_tst, count_tst)
+        specified[art_name] = utils.ratio(value_spc, count_spc)
+        tested[art_name] = utils.ratio(value_tst, count_tst)
 
     for builder in project_builder.builders:
         comp = completion.Completion(

@@ -14,6 +14,7 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Contains functionality related to the naming of Artifacts."""
 from __future__ import unicode_literals
 import re
 
@@ -34,13 +35,15 @@ TST = "TST"
 
 
 class Name(utils.KeyCmp):
-    def __init__(self, key, ty, raw):
+    """Representation of the name of an Artifact."""
+    def __init__(self, key, art_type, raw):
         super(Name, self).__init__(key=key.upper())
-        self.ty = ty
+        self.art_type = art_type
         self.raw = raw
 
     @classmethod
     def from_str(cls, raw):
+        """Generate a Name from raw text."""
         if raw is None:
             raise ValueError("the str cannot be None")
 
@@ -48,16 +51,16 @@ class Name(utils.KeyCmp):
         if not match:
             raise ValueError("Invalid name: {}".format(raw))
 
-        return cls(key=raw.upper(), ty=match.group(1).upper(), raw=raw)
+        return cls(key=raw.upper(), art_type=match.group(1).upper(), raw=raw)
 
     def is_req(self):
-        return self.ty == REQ
+        return self.art_type == REQ
 
     def is_spc(self):
-        return self.ty == SPC
+        return self.art_type == SPC
 
     def is_tst(self):
-        return self.ty == TST
+        return self.art_type == TST
 
     def __repr__(self):
         return self.raw
@@ -67,6 +70,7 @@ class Name(utils.KeyCmp):
 
 
 class SubPart(utils.KeyCmp):
+    """Representation of an Artifact SubPart"""
     def __init__(self, key, raw):
         super(SubPart, self).__init__(key=key)
         self.raw = raw
@@ -76,6 +80,7 @@ class SubPart(utils.KeyCmp):
 
     @classmethod
     def from_str(cls, raw):
+        """Generate a SubPart from raw text."""
         match = SUB_PART_VALID_RE.match(raw)
         if not match:
             raise ValueError("Invalid subparts: {}".format(raw))

@@ -14,13 +14,12 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""The artifact class and builder."""
 from __future__ import unicode_literals
-import six
 
 from . import utils
 from .name import Name
 from .name import SubPart
-from . import completion
 
 
 class Artifact:
@@ -28,6 +27,8 @@ class Artifact:
 
     See #SPC-design.artifact
     """
+
+    # pylint: disable=too-many-arguments
     def __init__(
             self,
             name,
@@ -66,6 +67,8 @@ class Artifact:
 
 class ArtifactBuilder:
     """Builder object for the artifact."""
+
+    # pylint: disable=too-many-arguments
     def __init__(self, name, file_, partof, subparts, done, extra):
         self.name = name
         self.file = file_
@@ -81,12 +84,12 @@ class ArtifactBuilder:
     @classmethod
     def from_attributes(cls, attributes, name, file_):
         """Construct from a dictionary, with some overloads available."""
-        return cls.from_attributes_consume(attributes=dict(attributes),
-                                           name=name,
-                                           file_=file_)
+        return cls._from_attributes_consume(attributes=dict(attributes),
+                                            name=name,
+                                            file_=file_)
 
     @classmethod
-    def from_attributes_consume(cls, attributes, name, file_):
+    def _from_attributes_consume(cls, attributes, name, file_):
         name_raw = name.raw
         partof = utils.ensure_list(name_raw + ' partof',
                                    attributes.pop('partof', []))

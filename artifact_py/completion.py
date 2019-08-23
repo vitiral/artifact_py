@@ -14,17 +14,16 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
-from __future__ import unicode_literals, division
 """
 For types and methods associated with the completion ratio of artifacts.
 """
-import re
+from __future__ import unicode_literals, division
 from . import utils
-from . import name
 from . import code
 
 
 class Completion(utils.KeyCmp):
+    """Represents the completion status of an artifact."""
     def __init__(self, spc, tst):
         super(Completion, self).__init__(key=(spc, tst))
         self.spc = spc
@@ -37,7 +36,8 @@ class Completion(utils.KeyCmp):
         }
 
 
-class ImplDone:
+class ImplDone(object):
+    """Represents a Done implementation for an artifact."""
     def __init__(self, raw):
         self.raw = raw
 
@@ -60,14 +60,12 @@ def impl_to_statistics(impl, subparts):
             # If subparts are defined not being implemented
             # in code means that you get counts against you
             return (1 + len(subparts), 0.0, 0, 0.0)
-        else:
-            return (0, 0.0, 0, 0.0)
+        return (0, 0.0, 0, 0.0)
     if isinstance(impl, ImplDone):
         return (1, 1.0, 1, 1.0)
     if isinstance(impl, code.ImplCode):
         return _implcode_to_statistics(impl, subparts)
-    else:
-        raise TypeError(impl)
+    raise TypeError(impl)
 
 
 def _implcode_to_statistics(impl, subparts):

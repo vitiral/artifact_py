@@ -35,6 +35,7 @@ init:
 	virtualenv --python=python3 py3
 	py3/bin/pip install -r requirements.txt
 	py3/bin/pip install pytest yapf pylint twine
+	py3/bin/pip install pytest yapf pylint twine
 
 fix:
 	py3/bin/yapf --in-place -r artifact_py tests
