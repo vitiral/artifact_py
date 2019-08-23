@@ -21,6 +21,7 @@ import re
 import anchor_txt
 import six
 
+from .name import format_name
 from . import code
 from . import artifact
 
@@ -98,7 +99,7 @@ def get_reference_links(project):
 
 
 def reference_link_inline(name, subpart=None):
-    reference = reference_str(name, subpart)
+    reference = format_name(name, subpart)
 
     return anchor_txt.ReferenceLink.from_parts(
         reference=reference,
@@ -107,7 +108,7 @@ def reference_link_inline(name, subpart=None):
 
 
 def reference_link_code(settings, name, codeloc, subpart=None):
-    reference = reference_str(name, subpart)
+    reference = format_name(name, subpart)
 
     link = settings.code_url.format(
         file=settings.relpath(codeloc.file),
@@ -117,12 +118,6 @@ def reference_link_code(settings, name, codeloc, subpart=None):
         reference='@' + reference,
         link=link,
     )
-
-
-def reference_str(name, subpart=None):
-    if subpart is None:
-        return name.raw
-    return '{}.{}'.format(name.raw, subpart.raw)
 
 
 def get_last_section(project):

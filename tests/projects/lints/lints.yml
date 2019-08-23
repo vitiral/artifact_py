@@ -1,0 +1,6 @@
+errors:
+  - 'SPC-fail is partof SPC-dne which does not exist'
+  - 'SPC-fail is partof TST-hi. TST types cannot be partof non-TST types.'
+  - 'SPC-fail is implemented in code multiple times: script.py[1] script.py[1]'
+  - 'SPC-fail.subpart is implemented in code multiple times: script.py[2] script.py[2]'
+warnings: []

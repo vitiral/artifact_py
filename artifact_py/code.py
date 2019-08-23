@@ -87,6 +87,9 @@ class CodeLoc:
             "line": self.line,
         }
 
+    def to_str(self, settings):
+        return "{}[{}]".format(settings.relpath(self.file), self.line)
+
 
 def find_impls(settings):
     """Set search settings from a settings object, and begin a recursive search for code impls."""

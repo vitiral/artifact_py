@@ -34,6 +34,13 @@ SPC = "SPC"
 TST = "TST"
 
 
+def format_name(name, subpart=None):
+    """Return the proper string format of the name"""
+    if subpart is None:
+        return name.raw
+    return '{}.{}'.format(name.raw, subpart.raw)
+
+
 class Name(utils.KeyCmp):
     """Representation of the name of an Artifact."""
     def __init__(self, key, art_type, raw):

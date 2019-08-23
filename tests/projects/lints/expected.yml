@@ -1,0 +1,44 @@
+settings:
+    code_paths:
+        - script.py
+        - src
+    code_url:
+      "https://github.com/vitiral/artifact_py/blob/master/tests/projects/lints/{file}#L{line}"
+    exclude_code_paths:
+        - src/exclude
+        - src/ignore.py
+    extra: {}
+artifacts:
+    - done: null
+      completion: {spc: 1.0, tst: 0.0}
+      file: README.md
+      name: SPC-fail
+      impl:
+          primary:
+              - file: 'script.py'
+                line: 1
+              - file: 'script.py'
+                line: 1
+          secondary:
+              subpart:
+                  - file: 'script.py'
+                    line: 2
+                  - file: 'script.py'
+                    line: 2
+      partof:
+          - SPC-dne
+          - TST-hi
+      parts: []
+      subparts:
+          - subpart
+      extra: {}
+    - done: null
+      completion: {spc: 1.0, tst: 1.0}
+      file: README.md
+      name: TST-hi
+      impl: null
+      partof: []
+      parts:
+          - SPC-fail
+      subparts: []
+      extra: {}
