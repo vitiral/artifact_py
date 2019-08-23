@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+import os
+import sys
+
+
+def recurse(path, times):
+    for t in range(times):
+        path = os.path.dirname(path)
+    return path
+
+
+sys.path.append(recurse(os.path.abspath(__file__), 3))
+
+import artifact_py
+sys.exit(artifact_py.main(sys.argv[1:]))

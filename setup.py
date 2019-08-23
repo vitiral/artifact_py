@@ -26,7 +26,7 @@ def read(*names, **kwargs):
 setup(
   name = 'artifact_py',
   packages = ['artifact_py'],
-  version = '0.1.1',
+  version = '0.1.2',
   license='MIT or APACHE-2.0',
   description = 'The design documentation tool for everyone',
   long_description=read('README.md'),

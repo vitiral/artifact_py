@@ -1,5 +1,3 @@
-py2/
-py3/
-pycheck/
+py*/
 dist/
 artifact_py.egg-info/
