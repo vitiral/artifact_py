@@ -24,8 +24,6 @@ zipit:
     done
 	cd dist && zip -r "$(fullname).zip" "$(fullname)"
 
-
-
 init:
 	# python2
 	virtualenv --python=python2 py2
@@ -44,6 +42,9 @@ fix:
 lint:
 	py3/bin/pylint artifact_py
 
+selflint:
+	PYTHONPATH=$$PWD:$$PYTHONPATH artifact_py/bin/artifact_py lint
+
 test2:
 	# Testing python2
 	PYTHONHASHSEED=42 py2/bin/py.test -vvv
@@ -51,6 +52,9 @@ test2:
 test3:
 	# Testing python3
 	py3/bin/py.test -vvv
+
+testpdb:
+	py3/bin/py.test -vvv -sx --pdb
 
 test: test3 test2
 

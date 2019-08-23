@@ -74,12 +74,18 @@ class ProjectBuilder(object):
         self.settings = proj_settings
 
     def set_impls(self, impls):
+        """Set all impls for the project.
+
+        `impls` must be a map of `artifact-name: impl`
+        """
         self.impls = impls
 
         for builder in self.builders:
             impl = impls.get(builder.name)
             if impl:
                 builder.set_impl(impl)
+            elif builder.done is not None:
+                builder.set_impl(completion.ImplDone(builder.done))
 
     def set_graph(self, graph):
         self.graph = graph
@@ -197,6 +203,8 @@ def update_completion(project_builder):
 
     for art_name in reversed(sorted_graph):
         builder = builder_map.get(art_name)
+        if builder is None:
+            continue  # artifact does not exist, lint will detect later
         stats = completion.impl_to_statistics(builder.impl, builder.subparts)
         (count_spc, value_spc, count_tst, value_tst) = stats
 
