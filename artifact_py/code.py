@@ -27,7 +27,6 @@ import six
 from . import name
 from .name import Name
 from .name import SubPart
-from . import utils
 
 RE_NAME_KEY = "name"
 RE_SUBPART_KEY = "subpart"
@@ -41,7 +40,7 @@ NAME_TAG_RE = re.compile(NAME_TAG_STR, re.I)
 NAME_TAG_VALID_RE = re.compile("${}^".format(NAME_TAG_STR), re.I)
 
 
-class ImplCode:
+class ImplCode(object):
     """Implemented in code.
 
     primary: list of CodeLoc
@@ -77,6 +76,7 @@ class ImplCode:
 
 
 class CodeLoc:
+    """Represents a code location: file and line number."""
     def __init__(self, file_, line):
         self.file = file_
         self.line = line
@@ -89,6 +89,7 @@ class CodeLoc:
 
 
 def find_impls(settings):
+    """Set search settings from a settings object, and begin a recursive search for code impls."""
     invalid = []
     impls = {}
     find_impls_recursive(
@@ -103,6 +104,7 @@ def find_impls(settings):
 
 
 def find_impls_recursive(invalid, impls, code_paths, exclude_code_paths):
+    """Recurse through directory structure and update impls with all files within."""
     for code_path in code_paths:
         if is_excluded(code_path, exclude_code_paths):
             continue
@@ -128,22 +130,24 @@ def is_excluded(path, exclude_code_paths):
 
 
 def update_impls_file(impls, code_file):
+    """Update impls with the code impls in the code_file"""
     with open(code_file) as fd:
         for linenum, line in enumerate(fd):
             update_impls_line(code_file, impls, linenum, line)
 
 
 def update_impls_line(code_file, impls, linenum, line):
+    """update impls with the code impls on the given line of code_file"""
     for match in NAME_TAG_RE.finditer(line):
         codeloc = CodeLoc(code_file, line=linenum)
         groups = match.groupdict()
-        name = Name.from_str(groups[RE_NAME_KEY])
-        if name not in impls:
-            impls[name] = ImplCode.new()
+        impl_name = Name.from_str(groups[RE_NAME_KEY])
+        if impl_name not in impls:
+            impls[impl_name] = ImplCode.new()
 
         subpart = groups.get(RE_SUBPART_KEY)
         if subpart:
             subpart = SubPart.from_str(subpart)
-            impls[name].insert_secondary(subpart, codeloc)
+            impls[impl_name].insert_secondary(subpart, codeloc)
         else:
-            impls[name].insert_primary(codeloc)
+            impls[impl_name].insert_primary(codeloc)

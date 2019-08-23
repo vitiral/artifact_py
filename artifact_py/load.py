@@ -14,10 +14,9 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Module for loading projects."""
 from __future__ import unicode_literals, division
-import copy
 
-import six
 import anchor_txt
 import networkx as nx
 
@@ -32,7 +31,8 @@ from . import utils
 SETTINGS_KEY = 'artifact'
 
 
-class ProjectBuilder:
+class ProjectBuilder(object):
+    """Loads a project."""
     def __init__(self, root_file, root_section):
         self.root_file = root_file
         self.root_section = root_section

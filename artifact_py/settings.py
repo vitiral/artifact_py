@@ -14,6 +14,7 @@
 # Unless you explicitly state otherwise, any contribution intentionally submitted
 # for inclusion in the work by you, as defined in the Apache-2.0 license, shall
 # be dual licensed as above, without any additional terms or conditions.
+"""Module for artifact document settings"""
 from __future__ import unicode_literals
 import os
 import six
@@ -22,7 +23,7 @@ from . import utils
 
 
 # code_url = "https://github.com/vitiral/artifact/blob/master/{file}#L{line}"
-class Settings:
+class Settings(object):
     """
     The settings which define how to load the artifacts and how to create url
     links.
@@ -30,7 +31,9 @@ class Settings:
     See #SPC-design.settings
 
     """
-    def __init__(self, root_file, root_dir, code_paths, exclude_code_paths,
+    # TODO break up Settings into a composite of related settings groups to
+    # deal with ever-expanding fields and constructor parameters
+    def __init__(self, root_file, root_dir, code_paths, exclude_code_paths, # pylint: disable=too-many-arguments
                  code_url, extra):
         self.root_file = root_file
         self.root_dir = root_dir
@@ -45,20 +48,21 @@ class Settings:
 
     @classmethod
     def from_dict_consume(cls, dct, root_file):
+        """Consume the given dictionary, returning a Settings instance."""
         root_dir = utils.ensure_str('root_dir', dct.pop('root_dir', ''))
         root_dir = utils.joinabs(os.path.dirname(root_file), root_dir)
 
         code_paths = utils.ensure_list(
             'code_paths',
             dct.pop('code_paths', []),
-            itemtype=six.text_type,
+            item_type=six.text_type,
         )
         code_paths = utils.joinabs_all(root_dir, code_paths)
 
         exclude_code_paths = utils.ensure_list(
             'exclude_code_paths',
             dct.pop('exclude_code_paths', []),
-            itemtype=six.text_type,
+            item_type=six.text_type,
         )
         exclude_code_paths = utils.joinabs_all(root_dir, exclude_code_paths)
 
@@ -80,9 +84,6 @@ class Settings:
     def relpath_all(self, paths):
         """Return the relative paths to the root directory."""
         return [self.relpath(p) for p in paths]
-
-    def serialize_list(self, lst):
-        return [v.serialize(self) for v in lst]
 
     def serialize_list(self, lst):
         return [v.serialize(self) for v in lst]
