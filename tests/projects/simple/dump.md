@@ -29,11 +29,22 @@ partof:
   - SPC-simple
 ```
 
+# Done (SPC-done) {#SPC-done}
+```yaml @
+partof:
+  - SPC-simple
+
+done: "yes"
+```
+
+This is done by default
+
 [@SPC-simple.deep]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/deep/deep.py#L1
 [@SPC-simple.script]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/script.py#L1
 [@SPC-simple.simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L2
 [@SPC-simple.tst-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L2
 [@SPC-simple]: https://github.com/vitiral/artifact_py/blob/master/tests/projects/simple/src/simple.py#L4
+[SPC-done]: #SPC-done
 [SPC-notimpl]: #SPC-notimpl
 [SPC-simple.deep]: #SPC-simple.deep
 [SPC-simple.script]: #SPC-simple.script

@@ -34,13 +34,13 @@ The primary differences will be:
       which is what is necessary in github
   - Artifact attributes are specified with a fenced code block. See [SPC-design]
     for an example.
-  - Removal of `[[REQ-foo]]` references. Instead you just use `[REQ-foo]` or `[@REQ-foo]` for code.
+  - Removal of `[[ART-foo]]` references. Instead you just use `[ART-foo]` or `[@ART-foo]` for code.
     When you run `art export --format md -i`  they will strip out references that look like
     `ART-foo.bar` and insert the correct links at the bottom of your document.
-    (i.e. `[@REQ-foo]: url/to/code.py`
+    (i.e. `[@ART-foo]: url/to/code.py`
   - Removal of specifying subparts (formerly called subnames) via
-    `[[REQ-foo.subpart]]`. Simply specify them in your attributes with partof,
-    and link to the code in your deisign doc with `[@REQ-foo.subpart]`.
+    `[[ART-foo.subpart]]`. Simply specify them in your attributes with partof,
+    and link to the code in your deisign doc with `[@ART-foo.subpart]`.
   - Has no special support for graphviz.
   - No exporting of the relationship of artifacts to the markdown file itself.
     In the author's opinion this frequently just added to clutter and was not
@@ -130,7 +130,7 @@ An artifact is a piece of documentation that can be linked to other pieces of
 documentation and to source code. It has the following attributes:
 
 - `name`: defines how it can be linked. The name is defined in the
-  anchor header (`{#REQ-foo}`)
+  anchor header (`{#ART-foo}`)
   - There are three types of artifacts: REQ (requirement), SPC (specification),
     TST (test)
 - `partof`: the other artifacts this artifact is a partof.
@@ -163,11 +163,11 @@ reflected in the code:
 - A `REQ` or `SPC` being `partof` a `TST`
 - Extra `impl` links in code
 - Having an artifact specified as "done" having an impl
-- Artifact or subpart like links in text (i.e. `[REQ-does-not-exist]`) that do
+- Artifact or subpart like links in text (i.e. `[ART-does-not-exist]`) that do
   not exist.
 - Design docs not being updated (run `artifact export --format md -i` to fix).
 - A link being found in code that does not have the `doc_url` prefixed.
-  (i.e. artifact expects links in code to look like `myurl.com/design#REQ-foo`)
+  (i.e. artifact expects links in code to look like `myurl.com/design#ART-foo`)
 
 ## Multi-project designs (SPC-design.multi) <a id="SPC-design.multi" />
 > Not yet implemented, design phase only
@@ -230,6 +230,7 @@ artifact:
     - tests/
 
   exclude_code_paths:
+    - artifact_py/__pycache__
     - tests/artifacts_only/
     - tests/projects/
     - tests/test_code.py

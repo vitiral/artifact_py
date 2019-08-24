@@ -17,15 +17,14 @@
 """Module for linting a project's design docs."""
 from __future__ import unicode_literals
 
-import six
 import re
+import six
 
 import anchor_txt
 
 from . import code
-from .name import format_name
-from . import code
 from . import dump
+from .name import format_name
 
 NAME_REF = r"\[{}\]".format(code.NAME_FULL_STR)
 NAME_REF_RE = re.compile(NAME_REF, re.IGNORECASE)
@@ -36,10 +35,8 @@ IMPL_MULTIPLE = "{} is implemented in code multiple times: {}"
 IMPL_DONE = "{} is implemented in code and marked as done. Code impls: {}"
 REF_INVALID = "{} is referenced in the design but does not exist."
 REF_INVALID_SUBPART = "{} is referenced in the design but subpart {} does not exist."
-PROJ_NOT_UPDATED = (
-    "Design references are out of date. To fix run:"
-    " artifact_py export -i --format md"
-)
+PROJ_NOT_UPDATED = ("Design references are out of date. To fix run:"
+                    " artifact_py export -i --format md")
 
 
 def lint_project(project):
@@ -128,7 +125,9 @@ class Lints(object):
 
     def lint_export_md(self):
         """Make sure that a new design doc shouldn't be exported."""
-        correct = '\n'.join(dump.dump_project(self.project))
+        correct = dump.dump_project(self.project)
+        correct.append('')  # every write_line adds a newline
+        correct = '\n'.join(correct)
         with open(self.project.settings.root_file) as proj_file:
             existing = proj_file.read()
 
@@ -151,9 +150,9 @@ class Lints(object):
 
 def _all_contents(section):
     """Return the contents of a section as an iterator."""
-    for c in section.contents:
-        yield c
+    for content in section.contents:
+        yield content
 
     for subsection in section.sections:
-        for c in _all_contents(subsection):
-            yield c
+        for content in _all_contents(subsection):
+            yield content

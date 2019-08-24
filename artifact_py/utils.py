@@ -107,7 +107,7 @@ def flush_output(output):
 
 def ensure_str(name, value, allow_none=False):
     """Raise an error if value is not a str and, optionally, is None."""
-    if allow_none and value is None:
+    if value is None and allow_none:
         return value
 
     if not isinstance(value, six.text_type):

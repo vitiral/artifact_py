@@ -1,16 +1,21 @@
-version = "0.1.3"
-fullname = "artifact_py-$(version)"
-zip_dir = "dist/$(fullname)/"
+.EXPORT_ALL_VARIABLES:
+
+PYTHONDONTWRITEBYTECODE = 1
+version = 0.1.3
+fullname = artifact_py-$(version)
+zip_dir = dist/$(fullname)/
 
 
-check: fix test
+check: fix test lint selflint check
 	# SHIP IT!
 
-ship: check
+checkship: check
 	rm -rf pycheck/ dist/
 	virtualenv --python=python3 pycheck
 	pycheck/bin/pip install .
+	pycheck/bin/artifact_py lint
 	py3/bin/python setup.py sdist
+	make nogit
 	# run: py3/bin/twine upload dist/*
 	# also run `make zipit` and upload that
 
@@ -22,6 +27,7 @@ zipit:
 	for pkg in decorator.py six.py anchor_txt/ networkx/ yaml/ ; do \
       cp -r py3/lib/python*/site-packages/$$pkg $(zip_dir); \
     done
+	$(zip_dir)/artifact_py/bin/artifact_py lint
 	cd dist && zip -r "$(fullname).zip" "$(fullname)"
 
 init:
@@ -43,7 +49,7 @@ lint:
 	py3/bin/pylint artifact_py
 
 selflint:
-	PYTHONPATH=$$PWD:$$PYTHONPATH artifact_py/bin/artifact_py lint
+	py3/bin/python -m artifact_py lint
 
 test2:
 	# Testing python2
@@ -60,3 +66,6 @@ test: test3 test2
 
 clean:
 	rm -rf py2 py3 dist artifact_py.egg-info
+
+nogit:
+	! git status --porcelain | grep .

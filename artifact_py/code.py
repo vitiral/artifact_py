@@ -21,10 +21,12 @@ See #SPC-design.code
 from __future__ import unicode_literals
 import re
 import os
+import sys
 
 import six
 
-from . import name
+from .name import NAME_VALID_STR
+from .name import SUB_PART_VALID_STR
 from .name import Name
 from .name import SubPart
 
@@ -32,7 +34,7 @@ RE_NAME_KEY = "name"
 RE_SUBPART_KEY = "subpart"
 
 NAME_FULL_STR = r"(?P<name>{})(:?\.(?P<subpart>{}))?".format(
-    name.NAME_VALID_STR, name.SUB_PART_VALID_STR)
+    NAME_VALID_STR, SUB_PART_VALID_STR)
 NAME_FULL_RE = re.compile(NAME_FULL_STR, re.I)
 
 NAME_TAG_STR = "#" + NAME_FULL_STR
@@ -59,7 +61,7 @@ class ImplCode(object):
         self.primary.append(codeloc)
 
     def insert_secondary(self, subpart, codeloc):
-        assert isinstance(subpart, name.SubPart)
+        assert isinstance(subpart, SubPart)
         assert isinstance(codeloc, CodeLoc)
         if subpart not in self.secondary:
             self.secondary[subpart] = []
@@ -134,9 +136,15 @@ def is_excluded(path, exclude_code_paths):
 
 def update_impls_file(impls, code_file):
     """Update impls with the code impls in the code_file"""
-    with open(code_file) as fd:
-        for linenum, line in enumerate(fd):
-            update_impls_line(code_file, impls, linenum, line)
+    try:
+        with open(code_file) as fd:
+            for linenum, line in enumerate(fd):
+                update_impls_line(code_file, impls, linenum, line)
+    except (IOError, UnicodeDecodeError) as exc:
+        # pylint: disable=no-member
+        six.reraise(Exception,
+                    Exception('{} at {}'.format(repr(exc), code_file)),
+                    sys.exc_info()[2])
 
 
 def update_impls_line(code_file, impls, linenum, line):
