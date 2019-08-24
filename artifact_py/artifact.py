@@ -57,7 +57,7 @@ class Artifact:
             "file": settings.relpath(self.file),
             "partof": sorted(settings.serialize_list(self.partof)),
             "subparts": sorted(settings.serialize_list(self.subparts)),
-            "done": settings.serialize_maybe(self.done),
+            "done": self.done,
             "parts": sorted(settings.serialize_list(self.parts)),
             "impl": settings.serialize_maybe(self.impl),
             "completion": self.completion.serialize(settings),

@@ -10,9 +10,10 @@ settings:
     extra: {}
 artifacts:
     - done: null
-      # spc: 1/1 self + 4/6 subparts + 0/1 part == 5/8 == 0.625
-      # tst: 0/0 self + 1/3 subparts + 0/1 part == 1/4 == 0.25
-      completion: {spc: 0.625, tst: 0.25}
+      # Note: not real math, all all nums with nums, denoms with denoms
+      # spc: 1/1 self + 4/6 subparts + 1/2 parts == 6/9 == 0.667
+      # tst: 0/0 self + 1/3 subparts + 1/2 parts == 2/5 == 0.4
+      completion: {spc: 0.667, tst: 0.4}
       file: README.md
       name: SPC-simple
       impl:
@@ -34,6 +35,7 @@ artifacts:
                   line: 1
       partof: []
       parts:
+          - SPC-done
           - SPC-notimpl
       subparts:
           - deep
@@ -44,10 +46,20 @@ artifacts:
           - tst-simple
       extra: {}
     - done: null
-      completion: {spc: 0, tst: 0}
+      completion: {spc: 0.0, tst: 0.0}
       file: README.md
       name: SPC-notimpl
       impl: null
+      partof:
+          - SPC-simple
+      parts: []
+      subparts: []
+      extra: {}
+    - done: "yes"
+      completion: {spc: 1.0, tst: 1.0}
+      file: README.md
+      name: SPC-done
+      impl: "yes"
       partof:
           - SPC-simple
       parts: []

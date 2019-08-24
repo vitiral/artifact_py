@@ -3,4 +3,10 @@ errors:
   - 'SPC-fail is partof TST-hi. TST types cannot be partof non-TST types.'
   - 'SPC-fail is implemented in code multiple times: script.py[1] script.py[1]'
   - 'SPC-fail.subpart is implemented in code multiple times: script.py[2] script.py[2]'
-warnings: []
+  - 'SPC-fail is implemented in code and marked as done. Code impls:
+     script.py[1] script.py[1] script.py[2] script.py[2]'
+
+warnings:
+  - '[SPC-dne] is referenced in the design but does not exist.'
+  - '[SPC-dne.code] is referenced in the design but does not exist.'
+  - 'Design references are out of date. To fix run: artifact_py export -i --format md'

@@ -1,6 +1,7 @@
 import unittest
 
 from artifact_py import code
+from artifact_py import lint
 
 
 class TestCode(unittest.TestCase):
@@ -17,3 +18,8 @@ class TestCode(unittest.TestCase):
         text = "stuff #SPC-single. other"
         result = [m.group(0) for m in code.NAME_TAG_RE.finditer(text)]
         assert ["#SPC-single"] == result
+
+    def test_re_ref(self):
+        text = "stuff [SPC-single]. other"
+        result = [m.group(0) for m in lint.NAME_REF_RE.finditer(text)]
+        assert ["[SPC-single]"] == result

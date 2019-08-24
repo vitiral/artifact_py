@@ -29,6 +29,15 @@ partof:
   - SPC-simple
 ```
 
+# Done (SPC-done) {#SPC-done}
+```yaml @
+partof:
+  - SPC-simple
+
+done: "yes"
+```
+
+This is done by default
 
 
 [SPC-away]: https://this.goes.away.com
