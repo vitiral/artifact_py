@@ -11,9 +11,100 @@ probably guide the development of artifact 3.0.
 
 Install with `pip install artifact_py`. It should work in python 2.7+ and 3+
 
-## Differences with [artifact]
+# Installatation and Use
 
-The primary differences will be:
+Get it from the python package index with (python 2 or 3) and run:
+```
+pip install artifact_py
+artifact_py --help
+```
+
+Or download the standalone zip file from [releases] and run within your build system
+```
+unzip artifact_py-0.1.2.zip
+artifact_py-0.1.2/artifact_py/bin/artifact_py --help
+```
+
+# Writing your design doc
+An artifact design doc is just a regular design doc which is parsed for _artifacts_.
+An _artifact_ is a linkable design piece. It is linkable to other artifacts and
+linkable to code.
+
+You specify an artifact like so:
+
+    # This is an artifact (SPC-my_artifact) {#SPC-my_artifact}
+
+Or alternatively (in github)
+
+    # This is an artifact (SPC-my_artifact) <a id="SPC-my_artifact" />
+
+> Note: `(SPC-my_artifact)` is optional for readability when rendered.
+
+Artifacts can have attributes assigned to them to link them to eachother and
+code:
+- `partof`: the "parent" artifacts which this artifact is a "part of". For
+  instance `SPC-widget` might be partof `SPC-design`
+- `subparts`: pieces of the artifact that can be implemented in code and will
+  be referenced via `SPC-my_artifact.subpart`
+- `done`: normally you "complete" an artifact by linking it in code, but you can
+  also override it with the `done` field.
+- Any other fields will be stuffed into the artifact's `extra` field, which other
+  tools/plugins might be able to use (probably with `art export --format json`)
+
+This information is specified in yaml anywhere within the artifact's section
+(i.e. before the next header) like so:
+
+    ```yaml @
+    partof:
+    - SPC-design
+
+    subparts:
+    - foo
+    - bar
+    # contributes towards artifact's "tst %"
+    - tst-foo
+    - tst-bar
+    ```
+
+In addition, settings can be specified anywhere in the document detailing where
+to look for code and how to create the url links:
+
+    ```yaml @
+    artifact:
+      root_dir: './'
+
+      code_paths:
+        - artifact_py/
+        - tests/
+
+      exclude_code_paths:
+        - tests/artifacts_only/
+        - tests/projects/
+        - tests/test_code.py
+
+      code_url:
+        "https://github.com/vitiral/artifact_py/blob/master/{file}#L{line}"
+    ```
+
+Then in order to update the reference links in your README, simply run:
+```
+artifact_py export -i --format md
+```
+
+You can then use links like the following
+```
+[REQ-foo]: refers to the design document header.
+[@REQ-foo]: refers to where the artifact is implemented in code.
+```
+
+To check for errors in both design docs and code references, run:
+```
+artifact_py lint
+```
+
+# Differences with [artifact]
+
+The primary differences between `artfact_py` and `artifact` are:
 - Written in python instead of rust for easier inclusion in legacy build
   systems.
 - The use of the new [anchor_txt] markdown attribute format, developed
@@ -21,7 +112,7 @@ The primary differences will be:
   markdown implementation.
 - Removal of `.art/settings.toml`, replaced with an attribute block anywhere in
   the markdown file.
-- Massive simplification of the cmdline tool. The CLI may be improved in the future.
+- Massive simplification of the cmdline tool. The CLI may be extended in the future.
 - A few minor tweaks to simplify how artifacts are specified and linked.
   - Markdown can be exported _in place_ -- almost none of the document has to
     be changed.
@@ -54,7 +145,6 @@ other designs.
 Features still to be added:
 - Currently only supports a single markdown file. I also want to re-imagine how large
   numbers of files/etc could be integrated before adding more files.
-- Linting -- no linter currently exists
 - `text` field in the json of artifact. It was not required for any implementation details
   and may be added later.
 - A stable json output format. It is still in flux.
@@ -241,6 +331,7 @@ artifact:
 
 [artifact]: https://github.com/vitiral/artifact
 [anchor_txt]: https://github.com/vitiral/anchor_txt
+[releases]: https://github.com/vitiral/artifact_py/releases
 
 [@SPC-design.artifact]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/artifact.py#L28
 [@SPC-design.code]: https://github.com/vitiral/artifact_py/blob/master/artifact_py/code.py#L18
