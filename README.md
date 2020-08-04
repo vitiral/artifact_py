@@ -2,6 +2,9 @@
 > NOTICE: this is in alpha. It works but likely has many bugs and missing
 > features.
 
+**Note: this project, and the original written in rust, should now be
+considered abandoned. Please use it as you see fit.**
+
 This is a reimplementation of [artifact] in python. It will be the barebones of
 artifact necessary to put it in a build system. No featureful cli, no web-ui.
 Just parsing and exporting of json/markdown/etc.
